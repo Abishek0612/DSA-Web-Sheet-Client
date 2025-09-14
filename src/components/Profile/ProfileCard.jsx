@@ -3,34 +3,13 @@ import { motion } from "framer-motion";
 import { CalendarIcon, MailIcon, TrophyIcon, FlameIcon } from "lucide-react";
 import Badge from "../Common/Badge";
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  createdAt: string;
-  statistics: {
-    totalSolved: number;
-    currentStreak: number;
-    maxStreak: number;
-  };
-  preferences: {
-    language: string;
-    difficulty: string;
-  };
-}
-
-interface ProfileCardProps {
-  user: User;
-}
-
-const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
+const ProfileCard = ({ user }) => {
   const joinDate = new Date(user.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
   });
 
-  const getInitials = (name: string) => {
+  const getInitials = (name) => {
     return name
       .split(" ")
       .map((n) => n[0])

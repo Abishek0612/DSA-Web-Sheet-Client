@@ -3,23 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronRightIcon } from "lucide-react";
 
-interface Topic {
-  _id: string;
-  name: string;
-  icon: string;
-  progress?: {
-    solved: number;
-    total: number;
-    percentage: number;
-  };
-}
-
-interface TopicProgressProps {
-  topic: Topic;
-  delay?: number;
-}
-
-const TopicProgress: React.FC<TopicProgressProps> = ({ topic, delay = 0 }) => {
+const TopicProgress = ({ topic, delay = 0 }) => {
   const progress = topic.progress || { solved: 0, total: 0, percentage: 0 };
 
   return (

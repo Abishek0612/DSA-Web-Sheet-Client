@@ -10,11 +10,6 @@ import {
   CogIcon,
 } from "lucide-react";
 
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
   { name: "Topics", href: "/topics", icon: BookOpenIcon },
@@ -24,10 +19,10 @@ const navigation = [
   { name: "Settings", href: "/settings", icon: CogIcon },
 ];
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path) => location.pathname === path;
 
   return (
     <>

@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { TrendingUpIcon } from "lucide-react";
 
-const ProgressChart: React.FC = () => {
+const ProgressChart = () => {
   const weeklyData = [
     { day: "Mon", problems: 5 },
     { day: "Tue", problems: 8 },

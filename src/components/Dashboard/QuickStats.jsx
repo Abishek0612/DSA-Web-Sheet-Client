@@ -2,16 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { TrophyIcon, FlameIcon, CalendarIcon, ClockIcon } from "lucide-react";
 
-interface QuickStatsProps {
-  stats: {
-    totalSolved: number;
-    currentStreak: number;
-    maxStreak: number;
-    timeSpent: number;
-  };
-}
-
-const QuickStats: React.FC<QuickStatsProps> = ({ stats }) => {
+const QuickStats = ({ stats }) => {
   const statItems = [
     {
       label: "Problems Solved",

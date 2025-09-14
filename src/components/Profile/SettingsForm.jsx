@@ -5,31 +5,12 @@ import Button from "../Common/Button";
 import Input from "../Common/Input";
 import Card from "../Common/Card";
 
-interface Settings {
-  name: string;
-  email: string;
-  language: string;
-  difficulty: string;
-  theme: string;
-  notifications: {
-    email: boolean;
-    push: boolean;
-    streaks: boolean;
-  };
-}
-
-interface SettingsFormProps {
-  settings: Settings;
-  onSave: (settings: Settings) => Promise<void>;
-  loading?: boolean;
-}
-
-const SettingsForm: React.FC<SettingsFormProps> = ({
+const SettingsForm = ({
   settings: initialSettings,
   onSave,
   loading = false,
 }) => {
-  const [settings, setSettings] = useState<Settings>(initialSettings);
+  const [settings, setSettings] = useState(initialSettings);
 
   const languages = [
     { value: "javascript", label: "JavaScript" },
@@ -51,7 +32,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
     { value: "system", label: "System" },
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     await onSave(settings);
   };

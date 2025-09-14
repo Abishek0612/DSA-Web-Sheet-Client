@@ -1,16 +1,7 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-interface LoadingSpinnerProps {
-  size?: "small" | "medium" | "large" | "xlarge";
-  variant?: "default" | "overlay" | "inline" | "minimal";
-  color?: "primary" | "secondary" | "white" | "gray";
-  message?: string;
-  className?: string;
-  fullScreen?: boolean;
-}
-
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+const LoadingSpinner = ({
   size = "medium",
   variant = "default",
   color = "primary",
@@ -104,9 +95,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   );
 };
 
-export const PageLoader: React.FC<{ message?: string }> = ({
-  message = "Loading page...",
-}) => (
+export const PageLoader = ({ message = "Loading page..." }) => (
   <LoadingSpinner
     size="large"
     variant="default"
@@ -115,31 +104,25 @@ export const PageLoader: React.FC<{ message?: string }> = ({
   />
 );
 
-export const OverlayLoader: React.FC<{ message?: string }> = ({
-  message = "Processing...",
-}) => <LoadingSpinner size="large" variant="overlay" message={message} />;
+export const OverlayLoader = ({ message = "Processing..." }) => (
+  <LoadingSpinner size="large" variant="overlay" message={message} />
+);
 
-export const InlineLoader: React.FC<{
-  message?: string;
-  size?: "small" | "medium";
-}> = ({ message = "Loading...", size = "small" }) => (
+export const InlineLoader = ({ message = "Loading...", size = "small" }) => (
   <LoadingSpinner size={size} variant="inline" message={message} />
 );
 
-export const ButtonLoader: React.FC = () => (
+export const ButtonLoader = () => (
   <LoadingSpinner size="small" variant="minimal" color="white" />
 );
 
-export const CardLoader: React.FC<{ message?: string }> = ({ message }) => (
+export const CardLoader = ({ message }) => (
   <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
     <LoadingSpinner size="medium" variant="default" message={message} />
   </div>
 );
 
-export const SkeletonLoader: React.FC<{
-  lines?: number;
-  className?: string;
-}> = ({ lines = 3, className = "" }) => (
+export const SkeletonLoader = ({ lines = 3, className = "" }) => (
   <div className={`animate-pulse space-y-3 ${className}`}>
     {Array.from({ length: lines }).map((_, index) => (
       <div key={index}>
@@ -152,7 +135,7 @@ export const SkeletonLoader: React.FC<{
   </div>
 );
 
-export const AppLoader: React.FC = () => (
+export const AppLoader = () => (
   <div className="fixed inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center z-50">
     <div className="text-center space-y-6">
       <div className="flex items-center justify-center space-x-2 mb-4">
@@ -185,7 +168,7 @@ export const AppLoader: React.FC = () => (
   </div>
 );
 
-export const useLoading = (initialState: boolean = false) => {
+export const useLoading = (initialState = false) => {
   const [loading, setLoading] = React.useState(initialState);
 
   const startLoading = () => setLoading(true);

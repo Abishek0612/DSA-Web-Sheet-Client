@@ -1,14 +1,6 @@
 import React from "react";
 
-interface LoadingSkeletonProps {
-  className?: string;
-  lines?: number;
-}
-
-const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
-  className = "",
-  lines = 1,
-}) => {
+const LoadingSkeleton = ({ className = "", lines = 1 }) => {
   return (
     <div className={`animate-pulse ${className}`}>
       {Array.from({ length: lines }).map((_, index) => (
@@ -23,7 +15,7 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
   );
 };
 
-export const CardSkeleton: React.FC = () => (
+export const CardSkeleton = () => (
   <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
     <div className="animate-pulse">
       <div className="flex items-center space-x-3 mb-4">
@@ -46,7 +38,7 @@ export const CardSkeleton: React.FC = () => (
   </div>
 );
 
-export const TableSkeleton: React.FC = () => (
+export const TableSkeleton = () => (
   <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
     <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700">
       <div className="h-5 bg-gray-200 dark:bg-gray-600 rounded w-1/4" />

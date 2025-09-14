@@ -15,16 +15,15 @@ import {
   BellIcon,
   SparklesIcon,
 } from "lucide-react";
-import type { RootState } from "../../store/store";
 import { logout } from "../../store/slices/authSlice";
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
@@ -37,17 +36,16 @@ const Navbar: React.FC = () => {
   ];
 
   const handleLogout = () => {
-    dispatch(logout() as any);
+    dispatch(logout());
     navigate("/login");
   };
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          {/* Logo  */}
           <div className="flex items-center">
             <Link to="/dashboard" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
@@ -59,7 +57,6 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* Desktop navigation */}
           <div className="hidden md:flex items-center space-x-4">
             {navigation.map((item) => {
               const Icon = item.icon;
@@ -80,20 +77,16 @@ const Navbar: React.FC = () => {
             })}
           </div>
 
-          {/* Right side actions */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Search */}
             <button className="p-2 rounded-lg text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
               <SearchIcon className="w-5 h-5" />
             </button>
 
-            {/* Notifications */}
             <button className="p-2 rounded-lg text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative">
               <BellIcon className="w-5 h-5" />
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
 
-            {/* Profile dropdown */}
             <div className="relative">
               <button
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
@@ -109,7 +102,6 @@ const Navbar: React.FC = () => {
                 </span>
               </button>
 
-              {/* Profile dropdown menu */}
               <AnimatePresence>
                 {isProfileDropdownOpen && (
                   <motion.div
@@ -149,7 +141,6 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -165,7 +156,6 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div

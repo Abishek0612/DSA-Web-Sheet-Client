@@ -3,17 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { XIcon } from "lucide-react";
 import Button from "./Button";
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-  children: React.ReactNode;
-  size?: "sm" | "md" | "lg" | "xl";
-  showCloseButton?: boolean;
-  closeOnBackdrop?: boolean;
-}
-
-const Modal: React.FC<ModalProps> = ({
+const Modal = ({
   isOpen,
   onClose,
   title,
@@ -23,7 +13,7 @@ const Modal: React.FC<ModalProps> = ({
   closeOnBackdrop = true,
 }) => {
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+    const handleEscape = (e) => {
       if (e.key === "Escape") {
         onClose();
       }
@@ -57,7 +47,6 @@ const Modal: React.FC<ModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -66,7 +55,6 @@ const Modal: React.FC<ModalProps> = ({
             className="absolute inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm"
           />
 
-          {/* Modal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -74,7 +62,6 @@ const Modal: React.FC<ModalProps> = ({
             transition={{ type: "spring", damping: 25, stiffness: 500 }}
             className={`relative w-full ${getSizeClasses()} bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 max-h-[90vh] overflow-hidden`}
           >
-            {/* Header */}
             {(title || showCloseButton) && (
               <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
                 {title && (
@@ -93,7 +80,6 @@ const Modal: React.FC<ModalProps> = ({
               </div>
             )}
 
-            {/* Content */}
             <div className="overflow-y-auto max-h-[calc(90vh-120px)]">
               {children}
             </div>

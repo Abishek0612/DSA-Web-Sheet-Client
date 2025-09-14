@@ -1,21 +1,9 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface TooltipProps {
-  content: string;
-  children: React.ReactNode;
-  position?: "top" | "bottom" | "left" | "right";
-  delay?: number;
-}
-
-const Tooltip: React.FC<TooltipProps> = ({
-  content,
-  children,
-  position = "top",
-  delay = 200,
-}) => {
+const Tooltip = ({ content, children, position = "top", delay = 200 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef();
 
   const showTooltip = () => {
     timeoutRef.current = setTimeout(() => {

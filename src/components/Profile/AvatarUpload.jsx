@@ -3,24 +3,12 @@ import { motion } from "framer-motion";
 import { CameraIcon, UploadIcon, XIcon } from "lucide-react";
 import Button from "../Common/Button";
 
-interface AvatarUploadProps {
-  currentAvatar?: string;
-  name: string;
-  onUpload: (file: File) => Promise<void>;
-  loading?: boolean;
-}
-
-const AvatarUpload: React.FC<AvatarUploadProps> = ({
-  currentAvatar,
-  name,
-  onUpload,
-  loading = false,
-}) => {
-  const [preview, setPreview] = useState<string | null>(null);
+const AvatarUpload = ({ currentAvatar, name, onUpload, loading = false }) => {
+  const [preview, setPreview] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef(null);
 
-  const getInitials = (name: string) => {
+  const getInitials = (name) => {
     return name
       .split(" ")
       .map((n) => n[0])
@@ -29,17 +17,17 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
       .slice(0, 2);
   };
 
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = (file) => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setPreview(e.target?.result as string);
+        setPreview(e.target?.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
 
@@ -49,7 +37,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       handleFileSelect(files[0]);

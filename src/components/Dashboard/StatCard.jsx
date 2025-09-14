@@ -1,26 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-interface StatCardProps {
-  title: string;
-  value: number | string;
-  icon: React.ReactNode;
-  color: string;
-  delay?: number;
-  trend?: {
-    value: number;
-    isPositive: boolean;
-  };
-}
-
-const StatCard: React.FC<StatCardProps> = ({
-  title,
-  value,
-  icon,
-  color,
-  delay = 0,
-  trend,
-}) => {
+const StatCard = ({ title, value, icon, color, delay = 0, trend }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
