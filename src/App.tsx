@@ -1,13 +1,12 @@
 import React, { Suspense, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store/store";
 import { loadUser } from "./store/slices/authSlice";
-import LoadingSpinner from "./components/LoadingSpinner";
-import ProtectedRoute from "./components/ProtectedRoute";
+import LoadingSpinner from "./components/Common/LoadingSpinner"; // ✅ Fixed
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
-// Lazy load components
+// Your lazy imports...
 const Login = React.lazy(() => import("./pages/Login"));
 const Register = React.lazy(() => import("./pages/Register"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
