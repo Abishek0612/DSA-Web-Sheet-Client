@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
-import type { RootState } from "../store/store";
 import { updateUser } from "../store/slices/authSlice";
 import Layout from "../components/Layout/Layout";
 import ProfileCard from "../components/Profile/ProfileCard";
@@ -11,11 +10,11 @@ import AvatarUpload from "../components/Profile/AvatarUpload";
 import ProgressStats from "../components/Progress/ProgressStats";
 import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 
-const Profile: React.FC = () => {
+const Profile = () => {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state: RootState) => state.auth);
+  const { user, loading } = useSelector((state) => state.auth);
 
-  const handleAvatarUpload = async (file: File) => {
+  const handleAvatarUpload = async (file) => {
     try {
       const formData = new FormData();
       formData.append("avatar", file);
@@ -36,7 +35,7 @@ const Profile: React.FC = () => {
       } else {
         throw new Error(data.message);
       }
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || "Failed to upload avatar");
     }
   };

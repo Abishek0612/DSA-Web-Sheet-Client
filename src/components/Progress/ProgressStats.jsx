@@ -2,20 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { TrophyIcon, FlameIcon, CalendarIcon, ClockIcon } from "lucide-react";
 
-interface ProgressStatsProps {
-  stats: {
-    totalSolved: number;
-    easySolved: number;
-    mediumSolved: number;
-    hardSolved: number;
-    currentStreak: number;
-    maxStreak: number;
-    timeSpent: number;
-    averageTime: number;
-  };
-}
-
-const ProgressStats: React.FC<ProgressStatsProps> = ({ stats }) => {
+const ProgressStats = ({ stats }) => {
   const statCards = [
     {
       title: "Problems Solved",

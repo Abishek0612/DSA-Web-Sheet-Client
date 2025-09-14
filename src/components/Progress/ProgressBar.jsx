@@ -1,17 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-interface ProgressBarProps {
-  value: number;
-  max?: number;
-  color?: "blue" | "green" | "yellow" | "red" | "purple";
-  size?: "sm" | "md" | "lg";
-  showLabel?: boolean;
-  animated?: boolean;
-  className?: string;
-}
-
-const ProgressBar: React.FC<ProgressBarProps> = ({
+const ProgressBar = ({
   value,
   max = 100,
   color = "blue",

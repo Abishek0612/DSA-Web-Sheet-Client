@@ -11,7 +11,6 @@ import {
   FilterIcon,
   EditIcon,
 } from "lucide-react";
-import type { RootState } from "../store/store";
 import { fetchTopicById } from "../store/slices/topicsSlice";
 import { updateProgress } from "../store/slices/progressSlice";
 import Layout from "../components/Layout/Layout";
@@ -23,24 +22,22 @@ import Button from "../components/Common/Button";
 import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 import EmptyState from "../components/Common/EmptyState";
 
-const TopicDetail: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
-  const { id } = useParams<{ id: string }>();
+const TopicDetail = () => {
+  const { user } = useSelector((state) => state.auth);
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { currentTopic, loading } = useSelector(
-    (state: RootState) => state.topics
-  );
-  const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
-  const [filterDifficulty, setFilterDifficulty] = useState<string>("");
-  const [filterStatus, setFilterStatus] = useState<string>("");
+  const { currentTopic, loading } = useSelector((state) => state.topics);
+  const [viewMode, setViewMode] = useState("cards");
+  const [filterDifficulty, setFilterDifficulty] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchTopicById(id) as any);
+      dispatch(fetchTopicById(id));
     }
   }, [dispatch, id]);
 
-  const handleStatusChange = async (problemId: string, status: string) => {
+  const handleStatusChange = async (problemId, status) => {
     if (!id) return;
 
     try {
@@ -49,10 +46,10 @@ const TopicDetail: React.FC = () => {
           topicId: id,
           problemId,
           status,
-        }) as any
+        })
       );
 
-      dispatch(fetchTopicById(id) as any);
+      dispatch(fetchTopicById(id));
     } catch (error) {
       console.error("Failed to update progress:", error);
     }
@@ -113,8 +110,6 @@ const TopicDetail: React.FC = () => {
       </Helmet>
 
       <div className="space-y-6">
-        {/* Header */}
-
         {user?.role === "admin" && (
           <div className="flex space-x-2 ml-4">
             <Link to={`/admin/topics`}>
@@ -125,6 +120,7 @@ const TopicDetail: React.FC = () => {
             </Link>
           </div>
         )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -189,7 +185,6 @@ const TopicDetail: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Prerequisites */}
         {currentTopic.prerequisites &&
           currentTopic.prerequisites.length > 0 && (
             <motion.div
@@ -211,7 +206,6 @@ const TopicDetail: React.FC = () => {
             </motion.div>
           )}
 
-        {/* Controls */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -275,7 +269,6 @@ const TopicDetail: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Problems */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

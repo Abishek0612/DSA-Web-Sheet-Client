@@ -8,29 +8,11 @@ import Card from "../components/Common/Card";
 import Button from "../components/Common/Button";
 import Badge from "../components/Common/Badge";
 
-interface GeneratedProblem {
-  title: string;
-  description: string;
-  inputFormat: string;
-  outputFormat: string;
-  examples: Array<{
-    input: string;
-    output: string;
-    explanation: string;
-  }>;
-  constraints: string[];
-  hints: string[];
-  timeComplexity: string;
-  spaceComplexity: string;
-  difficulty: string;
-  tags: string[];
-}
-
-const ProblemGeneratorPage: React.FC = () => {
-  const [problems, setProblems] = useState<GeneratedProblem[]>([]);
+const ProblemGeneratorPage = () => {
+  const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleGenerate = async (settings: any) => {
+  const handleGenerate = async (settings) => {
     setLoading(true);
     try {
       const response = await fetch("/api/ai/generate-problems", {
@@ -56,7 +38,7 @@ const ProblemGeneratorPage: React.FC = () => {
     }
   };
 
-  const handleCopyProblem = (problem: GeneratedProblem) => {
+  const handleCopyProblem = (problem) => {
     const text = `
 # ${problem.title}
 

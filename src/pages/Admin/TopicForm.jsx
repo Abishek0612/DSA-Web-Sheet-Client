@@ -3,13 +3,7 @@ import { motion } from "framer-motion";
 import Button from "../../components/Common/Button";
 import Input from "../../components/Common/Input";
 
-interface TopicFormProps {
-  topic?: any;
-  onSubmit: (data: any) => void;
-  onCancel: () => void;
-}
-
-const TopicForm: React.FC<TopicFormProps> = ({ topic, onSubmit, onCancel }) => {
+const TopicForm = ({ topic, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -22,7 +16,7 @@ const TopicForm: React.FC<TopicFormProps> = ({ topic, onSubmit, onCancel }) => {
     order: 1,
   });
 
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (topic) {
@@ -53,11 +47,7 @@ const TopicForm: React.FC<TopicFormProps> = ({ topic, onSubmit, onCancel }) => {
 
   const difficulties = ["Beginner", "Intermediate", "Advanced"];
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
@@ -66,7 +56,7 @@ const TopicForm: React.FC<TopicFormProps> = ({ topic, onSubmit, onCancel }) => {
   };
 
   const validateForm = () => {
-    const newErrors: any = {};
+    const newErrors = {};
 
     if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.description.trim())
@@ -79,7 +69,7 @@ const TopicForm: React.FC<TopicFormProps> = ({ topic, onSubmit, onCancel }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;

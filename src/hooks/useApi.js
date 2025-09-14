@@ -1,14 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 
-interface ApiState<T> {
-  data: T | null;
-  loading: boolean;
-  error: string | null;
-}
-
-export function useApi<T>(url: string, options?: { immediate?: boolean }) {
-  const [state, setState] = useState<ApiState<T>>({
+export function useApi(url, options = {}) {
+  const [state, setState] = useState({
     data: null,
     loading: false,
     error: null,
@@ -24,7 +18,7 @@ export function useApi<T>(url: string, options?: { immediate?: boolean }) {
         loading: false,
         error: null,
       });
-    } catch (error: any) {
+    } catch (error) {
       setState({
         data: null,
         loading: false,

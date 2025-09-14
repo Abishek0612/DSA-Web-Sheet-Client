@@ -11,7 +11,6 @@ import {
   AwardIcon,
   FlameIcon as FireIcon,
 } from "lucide-react";
-import type { RootState } from "../store/store";
 import Layout from "../components/Layout/Layout";
 import StatCard from "../components/Dashboard/StatCard";
 import ProgressChart from "../components/Dashboard/ProgressChart";
@@ -19,9 +18,9 @@ import RecentActivity from "../components/Dashboard/RecentActivity";
 import TopicProgress from "../components/Dashboard/TopicProgress";
 import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 
-const Dashboard: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
-  const { topics, loading } = useSelector((state: RootState) => state.topics);
+const Dashboard = () => {
+  const { user } = useSelector((state) => state.auth);
+  const { topics, loading } = useSelector((state) => state.topics);
 
   const getGreeting = () => {
     const hour = new Date().getHours();

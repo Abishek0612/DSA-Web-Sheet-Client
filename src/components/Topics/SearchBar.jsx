@@ -2,27 +2,17 @@ import React, { useState, useCallback } from "react";
 import { SearchIcon, XIcon } from "lucide-react";
 import debounce from "lodash.debounce";
 
-interface SearchBarProps {
-  onSearch: (query: string) => void;
-  placeholder?: string;
-  className?: string;
-}
-
-const SearchBar: React.FC<SearchBarProps> = ({
-  onSearch,
-  placeholder = "Search...",
-  className = "",
-}) => {
+const SearchBar = ({ onSearch, placeholder = "Search...", className = "" }) => {
   const [query, setQuery] = useState("");
 
   const debouncedSearch = useCallback(
-    debounce((searchQuery: string) => {
+    debounce((searchQuery) => {
       onSearch(searchQuery);
     }, 300),
     [onSearch]
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const value = e.target.value;
     setQuery(value);
     debouncedSearch(value);

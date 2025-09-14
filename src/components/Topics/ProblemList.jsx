@@ -9,33 +9,8 @@ import {
 } from "lucide-react";
 import Badge from "../Common/Badge";
 
-interface Problem {
-  _id: string;
-  name: string;
-  difficulty: "Easy" | "Medium" | "Hard";
-  links: {
-    leetcode?: string;
-    youtube?: string;
-    article?: string;
-  };
-  tags: string[];
-  progress?: {
-    status: "pending" | "attempted" | "solved";
-  };
-}
-
-interface ProblemListProps {
-  problems: Problem[];
-  onProblemClick: (problemId: string) => void;
-  onStatusChange: (problemId: string, status: string) => void;
-}
-
-const ProblemList: React.FC<ProblemListProps> = ({
-  problems,
-  onProblemClick,
-  onStatusChange,
-}) => {
-  const getDifficultyColor = (difficulty: string) => {
+const ProblemList = ({ problems, onProblemClick, onStatusChange }) => {
+  const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
       case "easy":
         return "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/20";
@@ -48,7 +23,7 @@ const ProblemList: React.FC<ProblemListProps> = ({
     }
   };
 
-  const getStatusIcon = (status?: string) => {
+  const getStatusIcon = (status) => {
     switch (status) {
       case "solved":
         return <CheckCircleIcon className="w-5 h-5 text-green-500" />;

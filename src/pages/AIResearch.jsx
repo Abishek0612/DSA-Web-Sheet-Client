@@ -6,15 +6,11 @@ import Layout from "../components/Layout/Layout";
 import ResearchPanel from "../components/AI/ResearchPanel";
 import Card from "../components/Common/Card";
 
-const AIResearch: React.FC = () => {
-  const [research, setResearch] = useState<{
-    topic: string;
-    content: string;
-    timestamp: string;
-  } | null>(null);
+const AIResearch = () => {
+  const [research, setResearch] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleResearch = async (topic: string, context: string) => {
+  const handleResearch = async (topic, context) => {
     setLoading(true);
     try {
       const response = await fetch("/api/ai/research", {
@@ -115,7 +111,6 @@ const AIResearch: React.FC = () => {
           </motion.div>
         )}
 
-        {/* Recent Research History */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

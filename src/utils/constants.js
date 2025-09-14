@@ -7,13 +7,13 @@ export const API_ENDPOINTS = {
   },
   TOPICS: {
     LIST: "/topics",
-    BY_ID: (id: string) => `/topics/${id}`,
+    BY_ID: (id) => `/topics/${id}`,
     CATEGORIES: "/topics/categories/list",
   },
   PROGRESS: {
     LIST: "/progress",
     UPDATE: "/progress",
-    DAILY: (year: number) => `/progress/daily/${year}`,
+    DAILY: (year) => `/progress/daily/${year}`,
   },
   AI: {
     RESEARCH: "/ai/research",
@@ -31,13 +31,13 @@ export const DIFFICULTY_LEVELS = {
   EASY: "Easy",
   MEDIUM: "Medium",
   HARD: "Hard",
-} as const;
+};
 
 export const PROBLEM_STATUS = {
   PENDING: "pending",
   ATTEMPTED: "attempted",
   SOLVED: "solved",
-} as const;
+};
 
 export const PROGRAMMING_LANGUAGES = [
   { value: "javascript", label: "JavaScript", color: "#f7df1e" },
@@ -65,14 +65,14 @@ export const NOTIFICATION_TYPES = {
   ERROR: "error",
   WARNING: "warning",
   INFO: "info",
-} as const;
+};
 
 export const LOCAL_STORAGE_KEYS = {
   THEME: "theme",
   TOKEN: "token",
   USER_PREFERENCES: "userPreferences",
   LAST_VISITED: "lastVisited",
-} as const;
+};
 
 export const ROUTES = {
   HOME: "/",
@@ -87,7 +87,7 @@ export const ROUTES = {
   AI_RESEARCH: "/ai-research",
   PROBLEM_GENERATOR: "/problem-generator",
   NOT_FOUND: "/404",
-} as const;
+};
 
 export const BREAKPOINTS = {
   SM: 640,
@@ -95,10 +95,10 @@ export const BREAKPOINTS = {
   LG: 1024,
   XL: 1280,
   "2XL": 1536,
-} as const;
+};
 
 export const ANIMATION_DURATION = {
   FAST: 150,
   NORMAL: 300,
   SLOW: 500,
-} as const;
+};

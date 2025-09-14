@@ -12,43 +12,10 @@ import {
 import Badge from "../Common/Badge";
 import Button from "../Common/Button";
 
-interface Problem {
-  _id: string;
-  name: string;
-  description: string;
-  difficulty: "Easy" | "Medium" | "Hard";
-  links: {
-    leetcode?: string;
-    codeforces?: string;
-    youtube?: string;
-    article?: string;
-  };
-  tags: string[];
-  companies: string[];
-  timeComplexity?: string;
-  spaceComplexity?: string;
-  hints: string[];
-  progress?: {
-    status: "pending" | "attempted" | "solved";
-    timeSpent: number;
-    attempts: number;
-    lastAttempted: string; // ✅ Corrected type from Date to string
-    rating?: number;
-  };
-}
-
-interface ProblemCardProps {
-  problem: Problem;
-  onStatusChange: (problemId: string, status: string) => void;
-}
-
-const ProblemCard: React.FC<ProblemCardProps> = ({
-  problem,
-  onStatusChange,
-}) => {
+const ProblemCard = ({ problem, onStatusChange }) => {
   const [showHints, setShowHints] = useState(false);
 
-  const getDifficultyColor = (difficulty: string) => {
+  const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
       case "easy":
         return "success";
@@ -61,7 +28,7 @@ const ProblemCard: React.FC<ProblemCardProps> = ({
     }
   };
 
-  const getStatusIcon = (status?: string) => {
+  const getStatusIcon = (status) => {
     switch (status) {
       case "solved":
         return <CheckCircleIcon className="w-5 h-5 text-green-500" />;
@@ -72,7 +39,7 @@ const ProblemCard: React.FC<ProblemCardProps> = ({
     }
   };
 
-  const handleStatusChange = (status: string) => {
+  const handleStatusChange = (status) => {
     onStatusChange(problem._id, status);
   };
 
@@ -91,7 +58,7 @@ const ProblemCard: React.FC<ProblemCardProps> = ({
             {getStatusIcon(problem.progress?.status)}
           </div>
           <div className="flex items-center space-x-2 mb-3">
-            <Badge variant={getDifficultyColor(problem.difficulty) as any}>
+            <Badge variant={getDifficultyColor(problem.difficulty)}>
               {problem.difficulty}
             </Badge>
             {problem.timeComplexity && (
@@ -239,7 +206,7 @@ const ProblemCard: React.FC<ProblemCardProps> = ({
               <StarIcon
                 key={star}
                 className={`w-4 h-4 ${
-                  star <= problem.progress!.rating!
+                  star <= problem.progress.rating
                     ? "text-yellow-400 fill-current"
                     : "text-gray-300"
                 }`}

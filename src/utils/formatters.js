@@ -1,21 +1,15 @@
-export const formatCurrency = (
-  amount: number,
-  currency: string = "USD"
-): string => {
+export const formatCurrency = (amount, currency = "USD") => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
   }).format(amount);
 };
 
-export const formatPercentage = (
-  value: number,
-  decimals: number = 1
-): string => {
+export const formatPercentage = (value, decimals = 1) => {
   return `${value.toFixed(decimals)}%`;
 };
 
-export const formatFileSize = (bytes: number): string => {
+export const formatFileSize = (bytes) => {
   if (bytes === 0) return "0 Bytes";
 
   const k = 1024;
@@ -25,7 +19,7 @@ export const formatFileSize = (bytes: number): string => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 };
 
-export const formatDuration = (seconds: number): string => {
+export const formatDuration = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
@@ -39,7 +33,7 @@ export const formatDuration = (seconds: number): string => {
   return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 };
 
-export const formatPhoneNumber = (phoneNumber: string): string => {
+export const formatPhoneNumber = (phoneNumber) => {
   const cleaned = phoneNumber.replace(/\D/g, "");
   const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
 
@@ -50,13 +44,7 @@ export const formatPhoneNumber = (phoneNumber: string): string => {
   return phoneNumber;
 };
 
-export const formatAddress = (address: {
-  street?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
-  country?: string;
-}): string => {
+export const formatAddress = (address) => {
   const parts = [
     address.street,
     address.city,
@@ -69,10 +57,7 @@ export const formatAddress = (address: {
   return parts.join(", ");
 };
 
-export const formatCode = (
-  code: string,
-  language: string = "javascript"
-): string => {
+export const formatCode = (code, language = "javascript") => {
   return code
     .split("\n")
     .map((line) => line.trim())
@@ -80,7 +65,7 @@ export const formatCode = (
     .join("\n");
 };
 
-export const formatMarkdown = (text: string): string => {
+export const formatMarkdown = (text) => {
   return text
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.*?)\*/g, "<em>$1</em>")

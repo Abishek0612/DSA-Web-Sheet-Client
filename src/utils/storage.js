@@ -1,7 +1,7 @@
 import { LOCAL_STORAGE_KEYS } from "./constants";
 
 class Storage {
-  static get<T>(key: string, defaultValue?: T): T | null {
+  static get(key, defaultValue) {
     try {
       const item = window.localStorage.getItem(key);
       if (item === null) return defaultValue || null;
@@ -12,7 +12,7 @@ class Storage {
     }
   }
 
-  static set<T>(key: string, value: T): void {
+  static set(key, value) {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
@@ -20,7 +20,7 @@ class Storage {
     }
   }
 
-  static remove(key: string): void {
+  static remove(key) {
     try {
       window.localStorage.removeItem(key);
     } catch (error) {
@@ -28,7 +28,7 @@ class Storage {
     }
   }
 
-  static clear(): void {
+  static clear() {
     try {
       window.localStorage.clear();
     } catch (error) {
@@ -36,39 +36,39 @@ class Storage {
     }
   }
 
-  static getToken(): string | null {
-    return this.get<string>(LOCAL_STORAGE_KEYS.TOKEN);
+  static getToken() {
+    return this.get(LOCAL_STORAGE_KEYS.TOKEN);
   }
 
-  static setToken(token: string): void {
+  static setToken(token) {
     this.set(LOCAL_STORAGE_KEYS.TOKEN, token);
   }
 
-  static removeToken(): void {
+  static removeToken() {
     this.remove(LOCAL_STORAGE_KEYS.TOKEN);
   }
 
-  static getTheme(): string | null {
-    return this.get<string>(LOCAL_STORAGE_KEYS.THEME);
+  static getTheme() {
+    return this.get(LOCAL_STORAGE_KEYS.THEME);
   }
 
-  static setTheme(theme: string): void {
+  static setTheme(theme) {
     this.set(LOCAL_STORAGE_KEYS.THEME, theme);
   }
 
-  static getUserPreferences(): any {
+  static getUserPreferences() {
     return this.get(LOCAL_STORAGE_KEYS.USER_PREFERENCES, {});
   }
 
-  static setUserPreferences(preferences: any): void {
+  static setUserPreferences(preferences) {
     this.set(LOCAL_STORAGE_KEYS.USER_PREFERENCES, preferences);
   }
 
-  static getLastVisited(): string | null {
-    return this.get<string>(LOCAL_STORAGE_KEYS.LAST_VISITED);
+  static getLastVisited() {
+    return this.get(LOCAL_STORAGE_KEYS.LAST_VISITED);
   }
 
-  static setLastVisited(path: string): void {
+  static setLastVisited(path) {
     this.set(LOCAL_STORAGE_KEYS.LAST_VISITED, path);
   }
 }

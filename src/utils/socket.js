@@ -1,10 +1,12 @@
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 
 class SocketService {
-  private socket: Socket | null = null;
-  private isConnected = false;
+  constructor() {
+    this.socket = null;
+    this.isConnected = false;
+  }
 
-  connect(token: string): void {
+  connect(token) {
     if (this.socket) {
       this.disconnect();
     }
@@ -29,7 +31,7 @@ class SocketService {
     });
   }
 
-  disconnect(): void {
+  disconnect() {
     if (this.socket) {
       this.socket.disconnect();
       this.socket = null;
@@ -37,13 +39,13 @@ class SocketService {
     }
   }
 
-  emit(event: string, data?: any): void {
+  emit(event, data) {
     if (this.socket && this.isConnected) {
       this.socket.emit(event, data);
     }
   }
 
-  on(event: string, callback: (data: any) => void): () => void {
+  on(event, callback) {
     if (this.socket) {
       this.socket.on(event, callback);
 
@@ -57,7 +59,7 @@ class SocketService {
     return () => {};
   }
 
-  off(event: string, callback?: (data: any) => void): void {
+  off(event, callback) {
     if (this.socket) {
       if (callback) {
         this.socket.off(event, callback);
@@ -67,11 +69,11 @@ class SocketService {
     }
   }
 
-  getSocket(): Socket | null {
+  getSocket() {
     return this.socket;
   }
 
-  getConnectionStatus(): boolean {
+  getConnectionStatus() {
     return this.isConnected;
   }
 }

@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { HomeIcon, ArrowLeftIcon } from "lucide-react";
 import Button from "../components/Common/Button";
 
-const NotFound: React.FC = () => {
+const NotFound = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
       <Helmet>

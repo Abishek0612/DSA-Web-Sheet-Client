@@ -3,18 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
-import type { RootState } from "../store/store"; // ✅ Corrected import
 import { updateUser } from "../store/slices/authSlice";
 import Layout from "../components/Layout/Layout";
 import SettingsForm from "../components/Profile/SettingsForm";
 import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 
-const Settings: React.FC = () => {
+const Settings = () => {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state: RootState) => state.auth);
+  const { user, loading } = useSelector((state) => state.auth);
   const [saving, setSaving] = useState(false);
 
-  const handleSave = async (settings: any) => {
+  const handleSave = async (settings) => {
     setSaving(true);
     try {
       const response = await fetch("/api/user/settings", {
@@ -34,7 +33,7 @@ const Settings: React.FC = () => {
       } else {
         throw new Error(data.message);
       }
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || "Failed to save settings");
     } finally {
       setSaving(false);

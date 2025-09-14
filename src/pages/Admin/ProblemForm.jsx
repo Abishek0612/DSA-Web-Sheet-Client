@@ -4,17 +4,7 @@ import { PlusIcon, TrashIcon } from "lucide-react";
 import Button from "../../components/Common/Button";
 import Input from "../../components/Common/Input";
 
-interface ProblemFormProps {
-  problem?: any;
-  onSubmit: (data: any) => void;
-  onCancel: () => void;
-}
-
-const ProblemForm: React.FC<ProblemFormProps> = ({
-  problem,
-  onSubmit,
-  onCancel,
-}) => {
+const ProblemForm = ({ problem, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -34,7 +24,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({
     hints: [""],
   });
 
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (problem) {
@@ -61,11 +51,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({
 
   const difficulties = ["Easy", "Medium", "Hard"];
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name.startsWith("links.")) {
@@ -83,7 +69,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({
     }
   };
 
-  const handleHintChange = (index: number, value: string) => {
+  const handleHintChange = (index, value) => {
     const newHints = [...formData.hints];
     newHints[index] = value;
     setFormData((prev) => ({ ...prev, hints: newHints }));
@@ -93,7 +79,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({
     setFormData((prev) => ({ ...prev, hints: [...prev.hints, ""] }));
   };
 
-  const removeHint = (index: number) => {
+  const removeHint = (index) => {
     if (formData.hints.length > 1) {
       setFormData((prev) => ({
         ...prev,
@@ -103,7 +89,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({
   };
 
   const validateForm = () => {
-    const newErrors: any = {};
+    const newErrors = {};
 
     if (!formData.name.trim()) newErrors.name = "Problem name is required";
     if (!formData.description.trim())
@@ -122,7 +108,7 @@ const ProblemForm: React.FC<ProblemFormProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
@@ -246,7 +232,6 @@ const ProblemForm: React.FC<ProblemFormProps> = ({
         placeholder="e.g., Google, Amazon, Microsoft"
       />
 
-      {/* Links Section */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-gray-900 dark:text-white">
           External Links (Optional)
@@ -300,7 +285,6 @@ const ProblemForm: React.FC<ProblemFormProps> = ({
         </div>
       </div>
 
-      {/* Hints Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">

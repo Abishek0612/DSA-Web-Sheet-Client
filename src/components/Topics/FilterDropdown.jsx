@@ -2,20 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDownIcon, CheckIcon } from "lucide-react";
 
-interface FilterOption {
-  value: string;
-  label: string;
-}
-
-interface FilterDropdownProps {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  options: FilterOption[];
-  placeholder?: string;
-}
-
-const FilterDropdown: React.FC<FilterDropdownProps> = ({
+const FilterDropdown = ({
   label,
   value,
   onChange,
@@ -23,14 +10,11 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
   placeholder = "Select option",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
@@ -39,7 +23,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelect = (optionValue: string) => {
+  const handleSelect = (optionValue) => {
     onChange(optionValue);
     setIsOpen(false);
   };

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { CalendarIcon, TrendingUpIcon, TargetIcon } from "lucide-react";
-import type { RootState } from "../store/store";
 import { fetchProgress } from "../store/slices/progressSlice";
 import Layout from "../components/Layout/Layout";
 import ProgressStats from "../components/Progress/ProgressStats";
@@ -12,16 +11,14 @@ import ProgressCalendar from "../components/Progress/ProgressCalendar";
 import Card from "../components/Common/Card";
 import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 
-const Progress: React.FC = () => {
+const Progress = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.auth);
-  const { loading } = useSelector((state: RootState) => state.progress);
-  const [timeRange, setTimeRange] = useState<"week" | "month" | "year">(
-    "month"
-  );
+  const { user } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.progress);
+  const [timeRange, setTimeRange] = useState("month");
 
   useEffect(() => {
-    dispatch(fetchProgress() as any);
+    dispatch(fetchProgress());
   }, [dispatch]);
 
   const mockCalendarData = {
@@ -105,7 +102,7 @@ const Progress: React.FC = () => {
 
           <div className="mt-4 md:mt-0">
             <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-              {(["week", "month", "year"] as const).map((range) => (
+              {["week", "month", "year"].map((range) => (
                 <button
                   key={range}
                   onClick={() => setTimeRange(range)}

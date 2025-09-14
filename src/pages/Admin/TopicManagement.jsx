@@ -10,7 +10,6 @@ import {
   BookOpenIcon,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import type { RootState } from "../../store/store";
 import { fetchTopics } from "../../store/slices/topicsSlice";
 import Layout from "../../components/Layout/Layout";
 import Button from "../../components/Common/Button";
@@ -22,20 +21,20 @@ import ProblemForm from "./ProblemForm";
 import ConfirmDialog from "./ConfirmDialog";
 import api from "../../services/api";
 
-const TopicManagement: React.FC = () => {
+const TopicManagement = () => {
   const dispatch = useDispatch();
-  const { topics, loading } = useSelector((state: RootState) => state.topics);
+  const { topics, loading } = useSelector((state) => state.topics);
 
   const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
   const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [editingTopic, setEditingTopic] = useState<any>(null);
-  const [editingProblem, setEditingProblem] = useState<any>(null);
-  const [selectedTopicId, setSelectedTopicId] = useState<string>("");
-  const [deleteItem, setDeleteItem] = useState<any>(null);
+  const [editingTopic, setEditingTopic] = useState(null);
+  const [editingProblem, setEditingProblem] = useState(null);
+  const [selectedTopicId, setSelectedTopicId] = useState("");
+  const [deleteItem, setDeleteItem] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchTopics() as any);
+    dispatch(fetchTopics());
   }, [dispatch]);
 
   const handleCreateTopic = () => {
@@ -43,34 +42,34 @@ const TopicManagement: React.FC = () => {
     setIsTopicModalOpen(true);
   };
 
-  const handleEditTopic = (topic: any) => {
+  const handleEditTopic = (topic) => {
     setEditingTopic(topic);
     setIsTopicModalOpen(true);
   };
 
-  const handleDeleteTopic = (topic: any) => {
+  const handleDeleteTopic = (topic) => {
     setDeleteItem({ type: "topic", item: topic });
     setIsDeleteModalOpen(true);
   };
 
-  const handleAddProblem = (topicId: string) => {
+  const handleAddProblem = (topicId) => {
     setSelectedTopicId(topicId);
     setEditingProblem(null);
     setIsProblemModalOpen(true);
   };
 
-  const handleEditProblem = (topicId: string, problem: any) => {
+  const handleEditProblem = (topicId, problem) => {
     setSelectedTopicId(topicId);
     setEditingProblem(problem);
     setIsProblemModalOpen(true);
   };
 
-  const handleDeleteProblem = (topicId: string, problem: any) => {
+  const handleDeleteProblem = (topicId, problem) => {
     setDeleteItem({ type: "problem", item: problem, topicId });
     setIsDeleteModalOpen(true);
   };
 
-  const handleTopicSubmit = async (formData: any) => {
+  const handleTopicSubmit = async (formData) => {
     try {
       if (editingTopic) {
         await api.put(`/topics/${editingTopic._id}`, formData);
@@ -80,13 +79,13 @@ const TopicManagement: React.FC = () => {
         toast.success("Topic created successfully!");
       }
       setIsTopicModalOpen(false);
-      dispatch(fetchTopics() as any);
-    } catch (error: any) {
+      dispatch(fetchTopics());
+    } catch (error) {
       toast.error(error.message || "Operation failed");
     }
   };
 
-  const handleProblemSubmit = async (formData: any) => {
+  const handleProblemSubmit = async (formData) => {
     try {
       if (editingProblem) {
         await api.put(
@@ -99,8 +98,8 @@ const TopicManagement: React.FC = () => {
         toast.success("Problem added successfully!");
       }
       setIsProblemModalOpen(false);
-      dispatch(fetchTopics() as any);
-    } catch (error: any) {
+      dispatch(fetchTopics());
+    } catch (error) {
       toast.error(error.message || "Operation failed");
     }
   };
@@ -117,8 +116,8 @@ const TopicManagement: React.FC = () => {
         toast.success("Problem deleted successfully!");
       }
       setIsDeleteModalOpen(false);
-      dispatch(fetchTopics() as any);
-    } catch (error: any) {
+      dispatch(fetchTopics());
+    } catch (error) {
       toast.error(error.message || "Delete failed");
     }
   };
@@ -207,7 +206,7 @@ const TopicManagement: React.FC = () => {
                     <h4 className="font-medium text-gray-900 dark:text-white">
                       Problems:
                     </h4>
-                    {topic.problems.map((problem: any) => (
+                    {topic.problems.map((problem) => (
                       <div
                         key={problem._id}
                         className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
@@ -258,7 +257,6 @@ const TopicManagement: React.FC = () => {
         </div>
       </div>
 
-      {/* Topic Form Modal */}
       <Modal
         isOpen={isTopicModalOpen}
         onClose={() => setIsTopicModalOpen(false)}
@@ -272,7 +270,6 @@ const TopicManagement: React.FC = () => {
         />
       </Modal>
 
-      {/* Problem Form Modal */}
       <Modal
         isOpen={isProblemModalOpen}
         onClose={() => setIsProblemModalOpen(false)}
@@ -286,7 +283,6 @@ const TopicManagement: React.FC = () => {
         />
       </Modal>
 
-      {/* Delete Confirmation */}
       <ConfirmDialog
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

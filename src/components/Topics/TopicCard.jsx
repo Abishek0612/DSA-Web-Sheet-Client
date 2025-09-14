@@ -4,28 +4,7 @@ import { motion } from "framer-motion";
 import { ChevronRightIcon, ClockIcon, BookOpenIcon } from "lucide-react";
 import Badge from "../Common/Badge";
 
-interface Topic {
-  _id: string;
-  name: string;
-  description: string;
-  icon: string;
-  category: string;
-  totalProblems: number;
-  estimatedTime: string;
-  progress?: {
-    solved: number;
-    total: number;
-    percentage: number;
-  };
-  tags: string[];
-}
-
-interface TopicCardProps {
-  topic: Topic;
-  delay?: number;
-}
-
-const TopicCard: React.FC<TopicCardProps> = ({ topic, delay = 0 }) => {
+const TopicCard = ({ topic, delay = 0 }) => {
   const progress = topic.progress || { solved: 0, total: 0, percentage: 0 };
 
   return (

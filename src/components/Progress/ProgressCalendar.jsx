@@ -1,15 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-interface ProgressCalendarProps {
-  data: Record<string, number>;
-  year?: number;
-}
-
-const ProgressCalendar: React.FC<ProgressCalendarProps> = ({
-  data,
-  year = new Date().getFullYear(),
-}) => {
+const ProgressCalendar = ({ data, year = new Date().getFullYear() }) => {
   const months = [
     "Jan",
     "Feb",
@@ -25,7 +17,7 @@ const ProgressCalendar: React.FC<ProgressCalendarProps> = ({
     "Dec",
   ];
 
-  const getIntensity = (count: number) => {
+  const getIntensity = (count) => {
     if (count === 0) return "bg-gray-100 dark:bg-gray-800";
     if (count <= 2) return "bg-green-200 dark:bg-green-900";
     if (count <= 4) return "bg-green-300 dark:bg-green-800";
@@ -33,11 +25,11 @@ const ProgressCalendar: React.FC<ProgressCalendarProps> = ({
     return "bg-green-500 dark:bg-green-600";
   };
 
-  const getDaysInMonth = (month: number, year: number) => {
+  const getDaysInMonth = (month, year) => {
     return new Date(year, month + 1, 0).getDate();
   };
 
-  const getDateString = (year: number, month: number, day: number) => {
+  const getDateString = (year, month, day) => {
     return `${year}-${String(month + 1).padStart(2, "0")}-${String(
       day
     ).padStart(2, "0")}`;

@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
 import { setTheme } from "../store/slices/uiSlice";
 
 export const useTheme = () => {
   const dispatch = useDispatch();
-  const theme = useSelector((state: RootState) => state.ui.theme);
+  const theme = useSelector((state) => state.ui.theme);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -31,7 +30,7 @@ export const useTheme = () => {
     dispatch(setTheme(newTheme));
   };
 
-  const setCurrentTheme = (newTheme: "light" | "dark" | "system") => {
+  const setCurrentTheme = (newTheme) => {
     dispatch(setTheme(newTheme));
   };
 

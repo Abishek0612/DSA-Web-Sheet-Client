@@ -3,21 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangleIcon } from "lucide-react";
 import Button from "../../components/Common/Button";
 
-interface ConfirmDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  title: string;
-  message: string;
-}
-
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  title,
-  message,
-}) => {
+const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message }) => {
   return (
     <AnimatePresence>
       {isOpen && (

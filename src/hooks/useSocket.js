@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 import { useAuth } from "./useAuth";
 
 export const useSocket = () => {
-  const socketRef = useRef<Socket | null>(null);
+  const socketRef = useRef(null);
   const { isAuthenticated, user } = useAuth();
 
   useEffect(() => {
@@ -28,13 +28,13 @@ export const useSocket = () => {
     }
   }, [isAuthenticated, user]);
 
-  const emit = (event: string, data: any) => {
+  const emit = (event, data) => {
     if (socketRef.current) {
       socketRef.current.emit(event, data);
     }
   };
 
-  const on = (event: string, callback: (data: any) => void) => {
+  const on = (event, callback) => {
     if (socketRef.current) {
       socketRef.current.on(event, callback);
 

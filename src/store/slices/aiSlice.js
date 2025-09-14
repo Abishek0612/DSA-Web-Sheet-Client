@@ -1,41 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api";
 
-interface Research {
-  id: string;
-  topic: string;
-  content: string;
-  timestamp: string;
-}
-
-interface GeneratedProblem {
-  title: string;
-  description: string;
-  difficulty: string;
-  language: string;
-  topic: string;
-  examples: any[];
-  hints: string[];
-  timeComplexity: string;
-  spaceComplexity: string;
-}
-
-interface ChatMessage {
-  id: string;
-  content: string;
-  role: "user" | "assistant";
-  timestamp: string;
-}
-
-interface AIState {
-  researches: Research[];
-  generatedProblems: GeneratedProblem[];
-  chatHistory: ChatMessage[];
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: AIState = {
+const initialState = {
   researches: [],
   generatedProblems: [],
   chatHistory: [],
@@ -45,7 +11,7 @@ const initialState: AIState = {
 
 export const generateResearch = createAsyncThunk(
   "ai/generateResearch",
-  async (data: { topic: string; context?: string }, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       const response = await api.post("/ai/research", data);
       return {
@@ -54,7 +20,7 @@ export const generateResearch = createAsyncThunk(
         content: response.data.research,
         timestamp: response.data.timestamp,
       };
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to generate research"
       );
@@ -64,19 +30,11 @@ export const generateResearch = createAsyncThunk(
 
 export const generateProblems = createAsyncThunk(
   "ai/generateProblems",
-  async (
-    settings: {
-      language: string;
-      difficulty: string;
-      topic: string;
-      count: number;
-    },
-    { rejectWithValue }
-  ) => {
+  async (settings, { rejectWithValue }) => {
     try {
       const response = await api.post("/ai/generate-problems", settings);
       return response.data.problems;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to generate problems"
       );
@@ -86,24 +44,24 @@ export const generateProblems = createAsyncThunk(
 
 export const sendChatMessage = createAsyncThunk(
   "ai/sendChatMessage",
-  async (data: { message: string; context?: string }, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       const response = await api.post("/ai/chat", data);
       return {
         userMessage: {
           id: Date.now().toString(),
           content: data.message,
-          role: "user" as const,
+          role: "user",
           timestamp: new Date().toISOString(),
         },
         assistantMessage: {
           id: (Date.now() + 1).toString(),
           content: response.data.response,
-          role: "assistant" as const,
+          role: "assistant",
           timestamp: response.data.timestamp,
         },
       };
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to send message"
       );
@@ -144,7 +102,7 @@ const aiSlice = createSlice({
       })
       .addCase(generateResearch.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
       })
       .addCase(generateProblems.pending, (state) => {
         state.loading = true;
@@ -157,7 +115,7 @@ const aiSlice = createSlice({
       })
       .addCase(generateProblems.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
       })
       .addCase(sendChatMessage.pending, (state) => {
         state.loading = true;
@@ -171,7 +129,7 @@ const aiSlice = createSlice({
       })
       .addCase(sendChatMessage.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
       });
   },
 });

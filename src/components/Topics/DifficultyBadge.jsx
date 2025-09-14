@@ -1,15 +1,7 @@
 import React from "react";
 import Badge from "../Common/Badge";
 
-interface DifficultyBadgeProps {
-  difficulty: "Easy" | "Medium" | "Hard";
-  className?: string;
-}
-
-const DifficultyBadge: React.FC<DifficultyBadgeProps> = ({
-  difficulty,
-  className = "",
-}) => {
+const DifficultyBadge = ({ difficulty, className = "" }) => {
   const getVariant = () => {
     switch (difficulty.toLowerCase()) {
       case "easy":
@@ -38,7 +30,7 @@ const DifficultyBadge: React.FC<DifficultyBadgeProps> = ({
 
   return (
     <Badge
-      variant={getVariant() as any}
+      variant={getVariant()}
       className={`inline-flex items-center space-x-1 ${className}`}
     >
       <span>{getIcon()}</span>

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { SearchIcon, GridIcon, ListIcon } from "lucide-react";
-import type { RootState } from "../store/store";
 import { fetchTopics } from "../store/slices/topicsSlice";
 import Layout from "../components/Layout/Layout";
 import TopicCard from "../components/Topics/TopicCard";
@@ -13,23 +12,21 @@ import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 import EmptyState from "../components/Common/EmptyState";
 import debounce from "lodash.debounce";
 
-const Topics: React.FC = () => {
+const Topics = () => {
   const dispatch = useDispatch();
-  const { topics, loading, error } = useSelector(
-    (state: RootState) => state.topics
-  );
+  const { topics, loading, error } = useSelector((state) => state.topics);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("order");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState("grid");
 
   useEffect(() => {
-    dispatch(fetchTopics() as any);
+    dispatch(fetchTopics());
   }, [dispatch]);
 
   const debouncedSearch = useMemo(
-    () => debounce((term: string) => setSearchTerm(term), 300),
+    () => debounce((term) => setSearchTerm(term), 300),
     []
   );
 
@@ -91,7 +88,7 @@ const Topics: React.FC = () => {
         <div className="text-center py-12">
           <div className="text-red-500 mb-4">Error loading topics</div>
           <button
-            onClick={() => dispatch(fetchTopics() as any)}
+            onClick={() => dispatch(fetchTopics())}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Retry
