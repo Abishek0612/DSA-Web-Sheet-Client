@@ -1,6 +1,12 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { authAPI } from "../../services/api";
+import type { LoginData, RegisterData } from "../../services/api";
 
-import type { LoginData, RegisterData, AuthResponse } from "../../services/api";
+// Define PayloadAction locally if import fails
+interface PayloadAction<P = void> {
+  type: string;
+  payload: P;
+}
 
 export interface User {
   id: string;
@@ -134,7 +140,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Login
+    // Login cases
     builder
       .addCase(login.pending, (state) => {
         state.loading = true;
@@ -146,6 +152,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.error = null;
+        state.isInitialized = true;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -153,9 +160,10 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.token = null;
+        state.isInitialized = true;
       });
 
-    // Register
+    // Register cases
     builder
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -167,6 +175,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.error = null;
+        state.isInitialized = true;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
@@ -174,9 +183,10 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.token = null;
+        state.isInitialized = true;
       });
 
-    // Load User
+    // Load User cases
     builder
       .addCase(loadUser.pending, (state) => {
         state.loading = true;
@@ -198,7 +208,7 @@ const authSlice = createSlice({
         state.isInitialized = true;
       });
 
-    // Logout
+    // Logout cases
     builder
       .addCase(logout.pending, (state) => {
         state.loading = true;
