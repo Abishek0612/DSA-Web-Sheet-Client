@@ -2,7 +2,6 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 import { store } from "../store/store";
 import { logout } from "../store/slices/authSlice";
 
-// Types
 export interface LoginData {
   email: string;
   password: string;
@@ -26,7 +25,6 @@ export interface AuthResponse {
   };
 }
 
-// Base API instance
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
   timeout: 10000,
@@ -35,7 +33,6 @@ const api: AxiosInstance = axios.create({
   },
 });
 
-// Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -49,14 +46,12 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle errors
 api.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
   },
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
       localStorage.removeItem("token");
       store.dispatch(logout());
       window.location.href = "/login";
@@ -65,7 +60,6 @@ api.interceptors.response.use(
   }
 );
 
-// Auth API endpoints
 export const authAPI = {
   // Login user
   login: async (credentials: LoginData): Promise<AuthResponse> => {
@@ -113,7 +107,7 @@ export const authAPI = {
   },
 };
 
-// Topics API endpoints
+// Topics API
 export const topicsAPI = {
   getAll: async (params?: any) => {
     const response = await api.get("/topics", { params });
@@ -136,7 +130,7 @@ export const topicsAPI = {
   },
 };
 
-// Progress API endpoints
+// Progress API
 export const progressAPI = {
   getAll: async (params?: any) => {
     const response = await api.get("/progress", { params });
@@ -176,7 +170,7 @@ export const progressAPI = {
   },
 };
 
-// AI API endpoints
+// AI API
 export const aiAPI = {
   generateResearch: async (data: { topic: string; context?: string }) => {
     const response = await api.post("/ai/research", data);
@@ -226,7 +220,7 @@ export const aiAPI = {
   },
 };
 
-// User API endpoints
+// User API
 export const userAPI = {
   getProfile: async () => {
     const response = await api.get("/user/profile");
@@ -268,5 +262,4 @@ export const userAPI = {
   },
 };
 
-// Export default api instance
 export default api;

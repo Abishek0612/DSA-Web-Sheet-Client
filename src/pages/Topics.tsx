@@ -2,22 +2,15 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import {
-  SearchIcon,
-  FilterIcon,
-  SortAscIcon,
-  GridIcon,
-  ListIcon,
-  ChevronDownIcon,
-} from "lucide-react";
-import { RootState } from "../store/store";
+import { SearchIcon, GridIcon, ListIcon } from "lucide-react";
+import type { RootState } from "../store/store";
 import { fetchTopics } from "../store/slices/topicsSlice";
 import Layout from "../components/Layout/Layout";
 import TopicCard from "../components/Topics/TopicCard";
 import TopicList from "../components/Topics/TopicList";
 import FilterDropdown from "../components/Topics/FilterDropdown";
-import LoadingSkeleton from "../components/LoadingSkeleton";
-import EmptyState from "../components/EmptyState";
+import LoadingSkeleton from "../components/Common/LoadingSkeleton";
+import EmptyState from "../components/Common/EmptyState";
 import debounce from "lodash.debounce";
 
 const Topics: React.FC = () => {
@@ -26,25 +19,20 @@ const Topics: React.FC = () => {
     (state: RootState) => state.topics
   );
 
-  // Local state
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("");
   const [sortBy, setSortBy] = useState("order");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTopics() as any);
   }, [dispatch]);
 
-  // Debounced search
   const debouncedSearch = useMemo(
     () => debounce((term: string) => setSearchTerm(term), 300),
     []
   );
 
-  // Filter and sort topics
   const filteredTopics = useMemo(() => {
     let filtered = topics.filter((topic) => {
       const matchesSearch =
@@ -56,7 +44,6 @@ const Topics: React.FC = () => {
       return matchesSearch && matchesCategory;
     });
 
-    // Sort topics
     switch (sortBy) {
       case "name":
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -77,7 +64,6 @@ const Topics: React.FC = () => {
     return filtered;
   }, [topics, searchTerm, selectedCategory, sortBy]);
 
-  // Get unique categories
   const categories = useMemo(() => {
     const uniqueCategories = [
       ...new Set(topics.map((topic) => topic.category)),
@@ -88,7 +74,6 @@ const Topics: React.FC = () => {
   const handleClearFilters = () => {
     setSearchTerm("");
     setSelectedCategory("");
-    setSelectedDifficulty("");
     setSortBy("order");
   };
 
@@ -127,7 +112,6 @@ const Topics: React.FC = () => {
       </Helmet>
 
       <div className="space-y-6">
-        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -138,7 +122,6 @@ const Topics: React.FC = () => {
             </p>
           </div>
 
-          {/* View Mode Toggle */}
           <div className="flex items-center space-x-2 mt-4 md:mt-0">
             <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
               <button
@@ -165,9 +148,7 @@ const Topics: React.FC = () => {
           </div>
         </div>
 
-        {/* Search and Filters */}
         <div className="flex flex-col md:flex-row gap-4">
-          {/* Search */}
           <div className="relative flex-1">
             <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
@@ -178,9 +159,7 @@ const Topics: React.FC = () => {
             />
           </div>
 
-          {/* Filters */}
           <div className="flex flex-wrap gap-2">
-            {/* Category Filter */}
             <FilterDropdown
               label="Category"
               value={selectedCategory}
@@ -188,8 +167,6 @@ const Topics: React.FC = () => {
               options={categories.map((cat) => ({ value: cat, label: cat }))}
               placeholder="All Categories"
             />
-
-            {/* Sort */}
             <FilterDropdown
               label="Sort by"
               value={sortBy}
@@ -201,8 +178,6 @@ const Topics: React.FC = () => {
                 { value: "difficulty", label: "Problem Count" },
               ]}
             />
-
-            {/* Clear Filters */}
             {(searchTerm || selectedCategory || sortBy !== "order") && (
               <button
                 onClick={handleClearFilters}
@@ -214,12 +189,10 @@ const Topics: React.FC = () => {
           </div>
         </div>
 
-        {/* Results Count */}
         <div className="text-sm text-gray-600 dark:text-gray-400">
           Showing {filteredTopics.length} of {topics.length} topics
         </div>
 
-        {/* Topics Grid/List */}
         <AnimatePresence mode="wait">
           {filteredTopics.length > 0 ? (
             <motion.div

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   HomeIcon,
   BookOpenIcon,
-  ChartBarIcon,
+  BarChart,
   SparklesIcon,
   UserIcon,
   CogIcon,
@@ -18,7 +18,7 @@ interface SidebarProps {
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
   { name: "Topics", href: "/topics", icon: BookOpenIcon },
-  { name: "Progress", href: "/progress", icon: ChartBarIcon },
+  { name: "Progress", href: "/progress", icon: BarChart },
   { name: "AI Research", href: "/ai-research", icon: SparklesIcon },
   { name: "Profile", href: "/profile", icon: UserIcon },
   { name: "Settings", href: "/settings", icon: CogIcon },

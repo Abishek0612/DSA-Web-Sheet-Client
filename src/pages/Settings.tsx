@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
-import { RootState } from "../store/store";
+import type { RootState } from "../store/store"; // ✅ Corrected import
 import { updateUser } from "../store/slices/authSlice";
 import Layout from "../components/Layout/Layout";
 import SettingsForm from "../components/Profile/SettingsForm";

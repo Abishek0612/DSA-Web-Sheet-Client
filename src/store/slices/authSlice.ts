@@ -3,14 +3,13 @@ import { authAPI } from "../../services/api";
 import type { LoginData, RegisterData } from "../../services/api";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-// Define PayloadAction locally if import fails
-
 export interface User {
   id: string;
   name: string;
   email: string;
   role: string;
   avatar?: string;
+  createdAt: string;
   preferences: {
     theme: "light" | "dark" | "system";
     language: string;
@@ -53,7 +52,6 @@ const initialState: AuthState = {
   isInitialized: false,
 };
 
-// Async Thunks
 export const login = createAsyncThunk(
   "auth/login",
   async (credentials: LoginData, { rejectWithValue }) => {

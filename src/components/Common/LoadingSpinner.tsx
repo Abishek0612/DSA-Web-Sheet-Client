@@ -1,5 +1,5 @@
 import React from "react";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 interface LoadingSpinnerProps {
   size?: "small" | "medium" | "large" | "xlarge";
@@ -18,7 +18,6 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   className = "",
   fullScreen = false,
 }) => {
-  // Size configurations
   const sizeClasses = {
     small: "h-4 w-4",
     medium: "h-8 w-8",
@@ -26,7 +25,6 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     xlarge: "h-16 w-16",
   };
 
-  // Color configurations
   const colorClasses = {
     primary: "text-blue-600",
     secondary: "text-gray-600",
@@ -34,7 +32,6 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     gray: "text-gray-400",
   };
 
-  // Message text color based on spinner color
   const messageColorClasses = {
     primary: "text-gray-600",
     secondary: "text-gray-500",
@@ -42,7 +39,6 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     gray: "text-gray-400",
   };
 
-  // Container classes based on variant
   const containerClasses = {
     default: "flex flex-col items-center justify-center space-y-3",
     overlay:
@@ -51,7 +47,6 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     minimal: "flex items-center justify-center",
   };
 
-  // Full screen override
   const finalContainerClass = fullScreen
     ? "fixed inset-0 bg-white flex flex-col items-center justify-center space-y-3 z-50"
     : containerClasses[variant];
@@ -109,7 +104,6 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   );
 };
 
-// Pre-configured spinner variants for common use cases
 export const PageLoader: React.FC<{ message?: string }> = ({
   message = "Loading page...",
 }) => (
@@ -142,7 +136,6 @@ export const CardLoader: React.FC<{ message?: string }> = ({ message }) => (
   </div>
 );
 
-// Skeleton loader for content placeholders
 export const SkeletonLoader: React.FC<{
   lines?: number;
   className?: string;
@@ -159,7 +152,6 @@ export const SkeletonLoader: React.FC<{
   </div>
 );
 
-// Full screen loading component for app initialization
 export const AppLoader: React.FC = () => (
   <div className="fixed inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center z-50">
     <div className="text-center space-y-6">
@@ -193,7 +185,6 @@ export const AppLoader: React.FC = () => (
   </div>
 );
 
-// Custom hook for loading states
 export const useLoading = (initialState: boolean = false) => {
   const [loading, setLoading] = React.useState(initialState);
 

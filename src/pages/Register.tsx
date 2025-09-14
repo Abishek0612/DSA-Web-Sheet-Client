@@ -6,7 +6,7 @@ import RegisterForm from "../components/Auth/RegisterForm";
 
 const Register: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <Helmet>
         <title>Register - DSA Sheet</title>
         <meta
@@ -21,26 +21,48 @@ const Register: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="max-w-md w-full space-y-8"
       >
-        <div>
-          <div className="mx-auto h-12 w-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-            <span className="text-white font-bold text-xl">DS</span>
+        {/* Header */}
+        <div className="text-center">
+          <div className="flex justify-center items-center space-x-2 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold text-xl">DS</span>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900">DSA Sheet</h1>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-gray-500">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+              className="font-medium text-blue-600 hover:text-blue-500"
             >
-              Sign in here
+              Sign in
             </Link>
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+        {/* Register Form */}
+        <div className="bg-white rounded-2xl shadow-xl p-8">
           <RegisterForm />
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-xs text-gray-500">
+          <p>By creating an account, you agree to our</p>
+          <div className="space-x-4 mt-1">
+            <Link to="/terms" className="hover:text-gray-700 transition-colors">
+              Terms of Service
+            </Link>
+            <span>•</span>
+            <Link
+              to="/privacy"
+              className="hover:text-gray-700 transition-colors"
+            >
+              Privacy Policy
+            </Link>
+          </div>
         </div>
       </motion.div>
     </div>

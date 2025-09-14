@@ -7,11 +7,10 @@ import {
   ArrowLeftIcon,
   BookOpenIcon,
   ClockIcon,
-  CheckCircleIcon,
   PlayIcon,
   FilterIcon,
 } from "lucide-react";
-import { RootState } from "../store/store";
+import type { RootState } from "../store/store";
 import { fetchTopicById } from "../store/slices/topicsSlice";
 import { updateProgress } from "../store/slices/progressSlice";
 import Layout from "../components/Layout/Layout";
@@ -51,7 +50,6 @@ const TopicDetail: React.FC = () => {
         }) as any
       );
 
-      // Refetch topic to update progress
       dispatch(fetchTopicById(id) as any);
     } catch (error) {
       console.error("Failed to update progress:", error);
@@ -285,7 +283,7 @@ const TopicDetail: React.FC = () => {
             />
           ) : viewMode === "cards" ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredProblems.map((problem, index) => (
+              {filteredProblems.map((problem) => (
                 <ProblemCard
                   key={problem._id}
                   problem={problem}

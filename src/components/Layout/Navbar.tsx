@@ -5,17 +5,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   HomeIcon,
   BookOpenIcon,
-  ChartBarIcon,
+  BarChart,
   UserIcon,
   CogIcon,
-  LogoutIcon,
+  LogOutIcon as LogoutIcon,
   MenuIcon,
   XIcon,
   SearchIcon,
   BellIcon,
   SparklesIcon,
 } from "lucide-react";
-import { RootState } from "../../store/store";
+import type { RootState } from "../../store/store";
 import { logout } from "../../store/slices/authSlice";
 
 const Navbar: React.FC = () => {
@@ -29,12 +29,12 @@ const Navbar: React.FC = () => {
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
     { name: "Topics", href: "/topics", icon: BookOpenIcon },
-    { name: "Progress", href: "/progress", icon: ChartBarIcon },
+    { name: "Progress", href: "/progress", icon: BarChart },
     { name: "AI Research", href: "/ai-research", icon: SparklesIcon },
   ];
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout() as any);
     navigate("/login");
   };
 
@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
     <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          {/* Logo and brand */}
+          {/* Logo  */}
           <div className="flex items-center">
             <Link to="/dashboard" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">

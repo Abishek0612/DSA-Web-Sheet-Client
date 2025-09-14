@@ -10,11 +10,9 @@ import {
   AlertCircle,
   CheckCircle,
 } from "lucide-react";
-import { RootState } from "../store/store";
+import type { RootState } from "../store/store";
 import { login, clearError } from "../store/slices/authSlice";
-import LoadingSpinner, {
-  ButtonLoader,
-} from "../components/Common/LoadingSpinner";
+import { ButtonLoader } from "../components/Common/LoadingSpinner";
 import { validateEmail } from "../utils/validators";
 
 interface LoginFormData {
@@ -46,28 +44,23 @@ const Login: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Get the intended destination from location state
   const from = (location.state as any)?.from?.pathname || "/dashboard";
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate(from, { replace: true });
     }
   }, [isAuthenticated, navigate, from]);
 
-  // Clear errors when component mounts or form data changes
   useEffect(() => {
     if (error) {
       dispatch(clearError());
     }
   }, [formData, dispatch]);
 
-  // Form validation
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    // Email validation
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else {
@@ -77,7 +70,6 @@ const Login: React.FC = () => {
       }
     }
 
-    // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
@@ -88,7 +80,6 @@ const Login: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -100,15 +91,12 @@ const Login: React.FC = () => {
 
     try {
       await dispatch(login(formData) as any);
-      // Navigation will be handled by the useEffect above
     } catch (error) {
-      // Error will be handled by Redux state
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -116,7 +104,6 @@ const Login: React.FC = () => {
       [name]: value,
     }));
 
-    // Clear field-specific error when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({
         ...prev,
@@ -125,12 +112,10 @@ const Login: React.FC = () => {
     }
   };
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Demo credentials helper
   const fillDemoCredentials = () => {
     setFormData({
       email: "demo@dsasheet.com",
@@ -139,7 +124,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">

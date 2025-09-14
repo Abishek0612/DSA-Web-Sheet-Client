@@ -32,7 +32,7 @@ interface Problem {
     status: "pending" | "attempted" | "solved";
     timeSpent: number;
     attempts: number;
-    lastAttempted: Date;
+    lastAttempted: string; // ✅ Corrected type from Date to string
     rating?: number;
   };
 }

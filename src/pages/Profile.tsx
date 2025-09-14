@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
-import { RootState } from "../store/store";
+import type { RootState } from "../store/store";
 import { updateUser } from "../store/slices/authSlice";
 import Layout from "../components/Layout/Layout";
 import ProfileCard from "../components/Profile/ProfileCard";
@@ -56,8 +56,8 @@ const Profile: React.FC = () => {
     hardSolved: user.statistics?.hardSolved || 0,
     currentStreak: user.statistics?.currentStreak || 0,
     maxStreak: user.statistics?.maxStreak || 0,
-    timeSpent: 1440, // 24 hours in minutes
-    averageTime: 25, // 25 minutes average
+    timeSpent: 1440,
+    averageTime: 25,
   };
 
   return (

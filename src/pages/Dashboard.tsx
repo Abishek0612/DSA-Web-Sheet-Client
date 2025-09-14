@@ -1,37 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import {
   TrendingUpIcon,
   BookOpenIcon,
-  ClockIcon,
   StarIcon,
   TargetIcon,
   CalendarIcon,
   AwardIcon,
-  FireIcon,
+  FlameIcon as FireIcon,
 } from "lucide-react";
-import { RootState } from "../store/store";
-import { fetchTopics } from "../store/slices/topicsSlice";
+import type { RootState } from "../store/store";
 import Layout from "../components/Layout/Layout";
 import StatCard from "../components/Dashboard/StatCard";
 import ProgressChart from "../components/Dashboard/ProgressChart";
 import RecentActivity from "../components/Dashboard/RecentActivity";
 import TopicProgress from "../components/Dashboard/TopicProgress";
-import LoadingSkeleton from "../components/LoadingSkeleton";
+import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 
 const Dashboard: React.FC = () => {
-  const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const { topics, loading } = useSelector((state: RootState) => state.topics);
-  const [greeting, setGreeting] = useState("");
-
-  useEffect(() => {
-    dispatch(fetchTopics() as any);
-    setGreeting(getGreeting());
-  }, [dispatch]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -61,7 +51,7 @@ const Dashboard: React.FC = () => {
 
   const getRecentTopics = () => {
     return topics
-      .filter((topic) => topic.progress?.solved > 0)
+      .filter((topic) => (topic.progress?.solved ?? 0) > 0)
       .sort((a, b) => (b.progress?.solved || 0) - (a.progress?.solved || 0))
       .slice(0, 3);
   };
@@ -88,7 +78,6 @@ const Dashboard: React.FC = () => {
       </Helmet>
 
       <div className="space-y-6">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -97,7 +86,7 @@ const Dashboard: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-center justify-between">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold mb-2">
-                {greeting}, {user?.name}! 👋
+                {getGreeting()}, {user?.name}! 👋
               </h1>
               <p className="text-blue-100 text-lg">
                 Ready to level up your DSA skills today?
@@ -112,7 +101,6 @@ const Dashboard: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="Total Solved"
@@ -144,7 +132,6 @@ const Dashboard: React.FC = () => {
           />
         </div>
 
-        {/* Progress Chart and Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <ProgressChart />
@@ -154,7 +141,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Topic Progress */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

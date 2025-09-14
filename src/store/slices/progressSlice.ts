@@ -78,7 +78,6 @@ const progressSlice = createSlice({
       })
       .addCase(updateProgress.fulfilled, (state, action) => {
         state.loading = false;
-        // Update the progress in the state
         const index = state.userProgress.findIndex(
           (p) => p._id === action.payload._id
         );

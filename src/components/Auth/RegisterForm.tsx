@@ -8,7 +8,7 @@ import {
   LockIcon,
   UserIcon,
 } from "lucide-react";
-import { RootState } from "../../store/store";
+import type { RootState } from "../../store/store";
 import { register } from "../../store/slices/authSlice";
 import Button from "../Common/Button";
 import Input from "../Common/Input";
@@ -71,7 +71,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         value={formData.name}
         onChange={handleChange}
         placeholder="Enter your full name"
-        icon={<UserIcon className="w-5 h-5" />}
+        leftIcon={<UserIcon className="w-5 h-5" />}
         required
       />
 
@@ -82,7 +82,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         value={formData.email}
         onChange={handleChange}
         placeholder="Enter your email"
-        icon={<MailIcon className="w-5 h-5" />}
+        leftIcon={<MailIcon className="w-5 h-5" />}
         required
       />
 
@@ -94,7 +94,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           value={formData.password}
           onChange={handleChange}
           placeholder="Enter your password"
-          icon={<LockIcon className="w-5 h-5" />}
+          leftIcon={<LockIcon className="w-5 h-5" />}
           required
         />
         <button
@@ -118,7 +118,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           value={formData.confirmPassword}
           onChange={handleChange}
           placeholder="Confirm your password"
-          icon={<LockIcon className="w-5 h-5" />}
+          leftIcon={<LockIcon className="w-5 h-5" />}
           required
         />
         <button

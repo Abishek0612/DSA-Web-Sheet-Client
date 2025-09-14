@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { CalendarIcon, TrendingUpIcon, TargetIcon } from "lucide-react";
-import { RootState } from "../store/store";
+import type { RootState } from "../store/store";
 import { fetchProgress } from "../store/slices/progressSlice";
 import Layout from "../components/Layout/Layout";
 import ProgressStats from "../components/Progress/ProgressStats";
@@ -15,9 +15,7 @@ import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 const Progress: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { userProgress, loading } = useSelector(
-    (state: RootState) => state.progress
-  );
+  const { loading } = useSelector((state: RootState) => state.progress);
   const [timeRange, setTimeRange] = useState<"week" | "month" | "year">(
     "month"
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store"; // ✅ This should now work
+import type { RootState } from "../../store/store";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -13,7 +13,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   );
   const location = useLocation();
 
-  // Show loading while checking auth status
   if (!isInitialized || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -22,7 +21,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

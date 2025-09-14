@@ -73,7 +73,6 @@ export const formatCode = (
   code: string,
   language: string = "javascript"
 ): string => {
-  // Basic code formatting - in a real app, you'd use a proper syntax highlighter
   return code
     .split("\n")
     .map((line) => line.trim())
