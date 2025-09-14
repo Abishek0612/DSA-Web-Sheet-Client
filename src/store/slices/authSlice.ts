@@ -1,12 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authAPI } from "../../services/api";
 import type { LoginData, RegisterData } from "../../services/api";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 // Define PayloadAction locally if import fails
-interface PayloadAction<P = void> {
-  type: string;
-  payload: P;
-}
 
 export interface User {
   id: string;

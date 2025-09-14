@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { topicsAPI, Topic } from "../../services/api";
+import { topicsAPI } from "../../services/api";
+import type { Topic } from "../../types/topic"; // Import from types instead
 
 export interface TopicsState {
   topics: Topic[];
@@ -15,15 +16,6 @@ export interface TopicsState {
     sort?: string;
   };
 }
-
-const initialState: TopicsState = {
-  topics: [],
-  currentTopic: null,
-  categories: [],
-  loading: false,
-  error: null,
-  filters: {},
-};
 
 // Async Thunks
 export const fetchTopics = createAsyncThunk(

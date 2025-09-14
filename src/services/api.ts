@@ -1,5 +1,13 @@
 import axios from "axios";
 import type { AxiosResponse, AxiosError } from "axios";
+import type { Topic, Problem } from "../types/topic";
+import type {
+  Progress,
+  ProgressStats,
+  UpdateProgressData,
+} from "../types/progress";
+
+// ... rest of your API code
 
 // Export all types/interfaces
 export interface LoginData {
@@ -62,63 +70,6 @@ export interface PaginatedResponse<T> {
     pages: number;
     hasNext: boolean;
     hasPrev: boolean;
-  };
-}
-
-export interface Topic {
-  _id: string;
-  name: string;
-  description: string;
-  icon: string;
-  category: string;
-  order: number;
-  isActive: boolean;
-  problems: Problem[];
-  totalProblems: number;
-  estimatedTime: string;
-  prerequisites: string[];
-  tags: string[];
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  progress?: {
-    solved: number;
-    total: number;
-    percentage: number;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Problem {
-  _id: string;
-  name: string;
-  description: string;
-  difficulty: "Easy" | "Medium" | "Hard";
-  links: {
-    leetcode?: string;
-    codeforces?: string;
-    youtube?: string;
-    article?: string;
-    editorial?: string;
-  };
-  tags: string[];
-  companies: string[];
-  timeComplexity?: string;
-  spaceComplexity?: string;
-  hints: string[];
-  solution?: {
-    approach: string;
-    code: string;
-    explanation: string;
-    language: string;
-  };
-  progress?: {
-    status: "pending" | "attempted" | "solved";
-    timeSpent: number;
-    attempts: number;
-    lastAttempted: string;
-    notes?: string;
-    rating?: number;
-    bookmarked?: boolean;
   };
 }
 
