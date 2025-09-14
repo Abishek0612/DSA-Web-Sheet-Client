@@ -1,24 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import LoadingSpinner from "./LoadingSpinner";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?:
-    | "primary"
-    | "secondary"
-    | "outline"
-    | "ghost"
-    | "danger"
-    | "success"
-    | "warning";
-  size?: "sm" | "md" | "lg";
-  loading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-  fullWidth?: boolean;
-}
-
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   children,
   variant = "primary",
   size = "md",

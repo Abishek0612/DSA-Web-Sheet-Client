@@ -1,16 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { progressAPI } from "../../services/api";
 
-export interface ProgressState {
-  userProgress: any[];
-  dailyProgress: Record<string, number>;
-  stats: any | null;
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: ProgressState = {
+const initialState = {
   userProgress: [],
   dailyProgress: {},
   stats: null,
@@ -18,14 +9,13 @@ const initialState: ProgressState = {
   error: null,
 };
 
-// Async thunks
 export const fetchProgress = createAsyncThunk(
   "progress/fetchProgress",
   async (_, { rejectWithValue }) => {
     try {
       const progress = await progressAPI.getAll();
       return progress;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch progress");
     }
   }
@@ -33,11 +23,11 @@ export const fetchProgress = createAsyncThunk(
 
 export const updateProgress = createAsyncThunk(
   "progress/updateProgress",
-  async (progressData: any, { rejectWithValue }) => {
+  async (progressData, { rejectWithValue }) => {
     try {
       const updatedProgress = await progressAPI.update(progressData);
       return updatedProgress;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.message || "Failed to update progress");
     }
   }
@@ -47,10 +37,10 @@ const progressSlice = createSlice({
   name: "progress",
   initialState,
   reducers: {
-    setLoading: (state, action: PayloadAction<boolean>) => {
+    setLoading: (state, action) => {
       state.loading = action.payload;
     },
-    setError: (state, action: PayloadAction<string | null>) => {
+    setError: (state, action) => {
       state.error = action.payload;
     },
     clearError: (state) => {
@@ -70,7 +60,7 @@ const progressSlice = createSlice({
       })
       .addCase(fetchProgress.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
       })
       .addCase(updateProgress.pending, (state) => {
         state.loading = true;
@@ -90,7 +80,7 @@ const progressSlice = createSlice({
       })
       .addCase(updateProgress.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
       });
   },
 });

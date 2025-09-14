@@ -10,41 +10,29 @@ import {
   AlertCircle,
   CheckCircle,
 } from "lucide-react";
-import type { RootState } from "../store/store";
 import { login, clearError } from "../store/slices/authSlice";
-import { ButtonLoader } from "../components/Common/LoadingSpinner";
 import { validateEmail } from "../utils/validators";
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
-
-interface FormErrors {
-  email?: string;
-  password?: string;
-}
-
-const Login: React.FC = () => {
+const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
   const { loading, error, isAuthenticated } = useSelector(
-    (state: RootState) => state.auth
+    (state) => state.auth
   );
 
-  const [formData, setFormData] = useState<LoginFormData>({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const from = (location.state as any)?.from?.pathname || "/dashboard";
+  const from = location.state?.from?.pathname || "/dashboard";
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -58,8 +46,8 @@ const Login: React.FC = () => {
     }
   }, [formData, dispatch]);
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
+  const validateForm = () => {
+    const newErrors = {};
 
     if (!formData.email) {
       newErrors.email = "Email is required";
@@ -80,7 +68,7 @@ const Login: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -90,21 +78,21 @@ const Login: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await dispatch(login(formData) as any);
+      await dispatch(login(formData));
     } catch (error) {
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    if (errors[name as keyof FormErrors]) {
+    if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
         [name]: undefined,
@@ -291,8 +279,8 @@ const Login: React.FC = () => {
           >
             {loading || isSubmitting ? (
               <>
-                <ButtonLoader />
-                <span className="ml-2">Signing in...</span>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent mr-2" />
+                <span>Signing in...</span>
               </>
             ) : (
               <>

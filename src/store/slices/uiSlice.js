@@ -1,14 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface UIState {
-  theme: "light" | "dark" | "system";
-  sidebarOpen: boolean;
-  notifications: any[];
-  loading: boolean;
-}
-
-const initialState: UIState = {
+const initialState = {
   theme: "system",
   sidebarOpen: false,
   notifications: [],
@@ -19,19 +11,19 @@ const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    setTheme: (state, action: PayloadAction<"light" | "dark" | "system">) => {
+    setTheme: (state, action) => {
       state.theme = action.payload;
     },
     toggleSidebar: (state) => {
       state.sidebarOpen = !state.sidebarOpen;
     },
-    setSidebarOpen: (state, action: PayloadAction<boolean>) => {
+    setSidebarOpen: (state, action) => {
       state.sidebarOpen = action.payload;
     },
-    addNotification: (state, action: PayloadAction<any>) => {
+    addNotification: (state, action) => {
       state.notifications.push(action.payload);
     },
-    removeNotification: (state, action: PayloadAction<string>) => {
+    removeNotification: (state, action) => {
       state.notifications = state.notifications.filter(
         (n) => n.id !== action.payload
       );

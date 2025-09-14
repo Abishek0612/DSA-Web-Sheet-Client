@@ -1,12 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useCallback } from "react";
-import { RootState } from "../store/store";
 import { logout, loadUser } from "../store/slices/authSlice";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
   const { user, isAuthenticated, loading, error } = useSelector(
-    (state: RootState) => state.auth
+    (state) => state.auth
   );
 
   const signOut = useCallback(() => {
@@ -14,7 +13,7 @@ export const useAuth = () => {
   }, [dispatch]);
 
   const refreshUser = useCallback(() => {
-    dispatch(loadUser() as any);
+    dispatch(loadUser());
   }, [dispatch]);
 
   return {

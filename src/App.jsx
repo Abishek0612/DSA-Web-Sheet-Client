@@ -2,7 +2,6 @@ import React, { Suspense, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AnimatePresence } from "framer-motion";
-import type { RootState } from "./store/store";
 import { loadUser } from "./store/slices/authSlice";
 import LoadingSpinner from "./components/Common/LoadingSpinner";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
@@ -17,18 +16,16 @@ const Settings = React.lazy(() => import("./pages/Settings"));
 const AIResearch = React.lazy(() => import("./pages/AIResearch"));
 const ProblemGenerator = React.lazy(() => import("./pages/ProblemGenerator"));
 const Progress = React.lazy(() => import("./pages/Progress"));
-const TopicManagement = React.lazy(
-  () => import("./pages/Admin/TopicManagement")
+const TopicManagement = React.lazy(() =>
+  import("./pages/Admin/TopicManagement")
 );
 
 function App() {
   const dispatch = useDispatch();
-  const { isAuthenticated, loading } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { isAuthenticated, loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(loadUser() as any);
+    dispatch(loadUser());
   }, [dispatch]);
 
   if (loading) {

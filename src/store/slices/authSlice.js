@@ -1,49 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authAPI } from "../../services/api";
-import type { LoginData, RegisterData } from "../../services/api";
-import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  avatar?: string;
-  createdAt: string;
-  preferences: {
-    theme: "light" | "dark" | "system";
-    language: string;
-    difficulty: "easy" | "medium" | "hard";
-    notifications: {
-      email: boolean;
-      push: boolean;
-      streaks: boolean;
-      achievements: boolean;
-    };
-  };
-  statistics: {
-    totalSolved: number;
-    easySolved: number;
-    mediumSolved: number;
-    hardSolved: number;
-    currentStreak: number;
-    maxStreak: number;
-    lastSolvedDate?: string;
-    totalTimeSpent: number;
-    averageTimePerProblem: number;
-  };
-}
-
-export interface AuthState {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  loading: boolean;
-  error: string | null;
-  isInitialized: boolean;
-}
-
-const initialState: AuthState = {
+const initialState = {
   user: null,
   token: localStorage.getItem("token"),
   isAuthenticated: false,
@@ -54,12 +12,12 @@ const initialState: AuthState = {
 
 export const login = createAsyncThunk(
   "auth/login",
-  async (credentials: LoginData, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue }) => {
     try {
       const response = await authAPI.login(credentials);
       localStorage.setItem("token", response.token);
       return response;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.message || "Login failed");
     }
   }
@@ -67,12 +25,12 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
   "auth/register",
-  async (userData: RegisterData, { rejectWithValue }) => {
+  async (userData, { rejectWithValue }) => {
     try {
       const response = await authAPI.register(userData);
       localStorage.setItem("token", response.token);
       return response;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.message || "Registration failed");
     }
   }
@@ -88,7 +46,7 @@ export const loadUser = createAsyncThunk(
       }
       const user = await authAPI.getCurrentUser();
       return { user, token };
-    } catch (error: any) {
+    } catch (error) {
       localStorage.removeItem("token");
       return rejectWithValue(error.message || "Failed to load user");
     }
@@ -102,14 +60,13 @@ export const logout = createAsyncThunk(
       await authAPI.logout();
       localStorage.removeItem("token");
       return null;
-    } catch (error: any) {
+    } catch (error) {
       localStorage.removeItem("token");
       return rejectWithValue(error.message || "Logout failed");
     }
   }
 );
 
-// Auth Slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -117,10 +74,10 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
+    setLoading: (state, action) => {
       state.loading = action.payload;
     },
-    updateUser: (state, action: PayloadAction<Partial<User>>) => {
+    updateUser: (state, action) => {
       if (state.user) {
         state.user = { ...state.user, ...action.payload };
       }
@@ -151,7 +108,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
         state.isAuthenticated = false;
         state.user = null;
         state.token = null;
@@ -174,7 +131,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
         state.isAuthenticated = false;
         state.user = null;
         state.token = null;

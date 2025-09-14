@@ -1,23 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { topicsAPI } from "../../services/api";
-import type { Topic } from "../../types/topic";
 
-export interface TopicsState {
-  topics: Topic[];
-  currentTopic: Topic | null;
-  categories: string[];
-  loading: boolean;
-  error: string | null;
-  filters: {
-    category?: string;
-    difficulty?: string;
-    search?: string;
-    sort?: string;
-  };
-}
-
-const initialState: TopicsState = {
+const initialState = {
   topics: [],
   currentTopic: null,
   categories: [],
@@ -26,14 +10,13 @@ const initialState: TopicsState = {
   filters: {},
 };
 
-// Async Thunks
 export const fetchTopics = createAsyncThunk(
   "topics/fetchTopics",
-  async (params: any | undefined, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
       const topics = await topicsAPI.getAll(params);
       return topics;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch topics");
     }
   }
@@ -41,11 +24,11 @@ export const fetchTopics = createAsyncThunk(
 
 export const fetchTopicById = createAsyncThunk(
   "topics/fetchTopicById",
-  async (id: string, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const topic = await topicsAPI.getById(id);
       return topic;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch topic");
     }
   }
@@ -57,7 +40,7 @@ export const fetchCategories = createAsyncThunk(
     try {
       const categories = await topicsAPI.getCategories();
       return categories;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch categories");
     }
   }
@@ -70,13 +53,13 @@ const topicsSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    setFilters: (state, action: PayloadAction<any>) => {
+    setFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
     },
     clearFilters: (state) => {
       state.filters = {};
     },
-    setCurrentTopic: (state, action: PayloadAction<Topic | null>) => {
+    setCurrentTopic: (state, action) => {
       state.currentTopic = action.payload;
     },
   },
@@ -94,7 +77,7 @@ const topicsSlice = createSlice({
       })
       .addCase(fetchTopics.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
       });
 
     // Fetch Topic by ID
@@ -110,7 +93,7 @@ const topicsSlice = createSlice({
       })
       .addCase(fetchTopicById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload;
       });
 
     // Fetch Categories
