@@ -17,6 +17,9 @@ const Settings = React.lazy(() => import("./pages/Settings"));
 const AIResearch = React.lazy(() => import("./pages/AIResearch"));
 const ProblemGenerator = React.lazy(() => import("./pages/ProblemGenerator"));
 const Progress = React.lazy(() => import("./pages/Progress"));
+const TopicManagement = React.lazy(
+  () => import("./pages/Admin/TopicManagement")
+);
 
 function App() {
   const dispatch = useDispatch();
@@ -134,6 +137,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Progress />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/topics"
+            element={
+              <ProtectedRoute>
+                <TopicManagement />
               </ProtectedRoute>
             }
           />

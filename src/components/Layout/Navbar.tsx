@@ -31,6 +31,9 @@ const Navbar: React.FC = () => {
     { name: "Topics", href: "/topics", icon: BookOpenIcon },
     { name: "Progress", href: "/progress", icon: BarChart },
     { name: "AI Research", href: "/ai-research", icon: SparklesIcon },
+    ...(user?.role === "admin"
+      ? [{ name: "Admin", href: "/admin/topics", icon: CogIcon }]
+      : []),
   ];
 
   const handleLogout = () => {

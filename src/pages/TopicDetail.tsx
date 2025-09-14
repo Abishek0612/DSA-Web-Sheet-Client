@@ -9,6 +9,7 @@ import {
   ClockIcon,
   PlayIcon,
   FilterIcon,
+  EditIcon,
 } from "lucide-react";
 import type { RootState } from "../store/store";
 import { fetchTopicById } from "../store/slices/topicsSlice";
@@ -23,6 +24,7 @@ import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 import EmptyState from "../components/Common/EmptyState";
 
 const TopicDetail: React.FC = () => {
+  const { user } = useSelector((state: RootState) => state.auth);
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch();
   const { currentTopic, loading } = useSelector(
@@ -112,6 +114,17 @@ const TopicDetail: React.FC = () => {
 
       <div className="space-y-6">
         {/* Header */}
+
+        {user?.role === "admin" && (
+          <div className="flex space-x-2 ml-4">
+            <Link to={`/admin/topics`}>
+              <Button variant="outline" size="sm">
+                <EditIcon className="w-4 h-4 mr-1" />
+                Manage
+              </Button>
+            </Link>
+          </div>
+        )}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
