@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangleIcon } from "lucide-react";
-import Button from "../Common/Button";
+import Button from "../../components/Common/Button";
 
 interface ConfirmDialogProps {
   isOpen: boolean;

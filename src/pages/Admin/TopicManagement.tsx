@@ -17,9 +17,9 @@ import Button from "../../components/Common/Button";
 import Card from "../../components/Common/Card";
 import Badge from "../../components/Common/Badge";
 import Modal from "../../components/Common/Modal";
-import TopicForm from "../../components/Admin/TopicForm";
-import ProblemForm from "../../components/Admin/ProblemForm";
-import ConfirmDialog from "../../components/Admin/ConfirmDialog";
+import TopicForm from "./TopicForm";
+import ProblemForm from "./ProblemForm";
+import ConfirmDialog from "./ConfirmDialog";
 import api from "../../services/api";
 
 const TopicManagement: React.FC = () => {

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PlusIcon, TrashIcon } from "lucide-react";
-import Button from "../Common/Button";
-import Input from "../Common/Input";
+import Button from "../../components/Common/Button";
+import Input from "../../components/Common/Input";
 
 interface ProblemFormProps {
   problem?: any;
