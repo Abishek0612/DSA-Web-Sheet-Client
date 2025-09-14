@@ -10,15 +10,7 @@ import Button from "../Common/Button";
 import Input from "../Common/Input";
 import Card from "../Common/Card";
 
-interface ResearchPanelProps {
-  onResearch: (topic: string, context: string) => Promise<void>;
-  loading?: boolean;
-}
-
-const ResearchPanel: React.FC<ResearchPanelProps> = ({
-  onResearch,
-  loading = false,
-}) => {
+const ResearchPanel = ({ onResearch, loading = false }) => {
   const [topic, setTopic] = useState("");
   const [context, setContext] = useState("");
 
@@ -33,7 +25,7 @@ const ResearchPanel: React.FC<ResearchPanelProps> = ({
     "Greedy Algorithms",
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!topic.trim()) return;
 
@@ -42,7 +34,7 @@ const ResearchPanel: React.FC<ResearchPanelProps> = ({
     setContext("");
   };
 
-  const handleSuggestedTopic = (suggestedTopic: string) => {
+  const handleSuggestedTopic = (suggestedTopic) => {
     setTopic(suggestedTopic);
   };
 

@@ -2,16 +2,11 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { EyeIcon, EyeOffIcon, MailIcon, LockIcon } from "lucide-react";
-import { RootState } from "../../store/store";
 import { login } from "../../store/slices/authSlice";
 import Button from "../Common/Button";
 import Input from "../Common/Input";
 
-interface LoginFormProps {
-  onSuccess?: () => void;
-}
-
-const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
+const LoginForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,18 +14,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await dispatch(login(formData) as any);
+    const result = await dispatch(login(formData));
     if (login.fulfilled.match(result)) {
       onSuccess?.();
     }

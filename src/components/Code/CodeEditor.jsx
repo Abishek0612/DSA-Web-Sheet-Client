@@ -3,16 +3,7 @@ import { Editor } from "@monaco-editor/react";
 import { PlayIcon, SendIcon, SettingsIcon } from "lucide-react";
 import Button from "../Common/Button";
 
-interface CodeEditorProps {
-  language: string;
-  initialCode?: string;
-  onRun: (code: string, input: string) => void;
-  onSubmit: (code: string) => void;
-  loading?: boolean;
-  theme?: "light" | "dark";
-}
-
-const CodeEditor: React.FC<CodeEditorProps> = ({
+const CodeEditor = ({
   language,
   initialCode = "",
   onRun,
@@ -23,9 +14,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [code, setCode] = useState(initialCode);
   const [input, setInput] = useState("");
   const [fontSize, setFontSize] = useState(14);
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef(null);
 
-  const languageTemplates: { [key: string]: string } = {
+  const languageTemplates = {
     javascript: `function solution() {
     // Write your code here
     
@@ -53,7 +44,7 @@ int main() {
     }
   }, [language, initialCode]);
 
-  const handleEditorDidMount = (editor: any) => {
+  const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
   };
 

@@ -4,23 +4,8 @@ import { WandIcon, CodeIcon, TargetIcon, BrainIcon } from "lucide-react";
 import Button from "../Common/Button";
 import Card from "../Common/Card";
 
-interface GeneratorSettings {
-  language: string;
-  difficulty: string;
-  topic: string;
-  count: number;
-}
-
-interface ProblemGeneratorProps {
-  onGenerate: (settings: GeneratorSettings) => Promise<void>;
-  loading?: boolean;
-}
-
-const ProblemGenerator: React.FC<ProblemGeneratorProps> = ({
-  onGenerate,
-  loading = false,
-}) => {
-  const [settings, setSettings] = useState<GeneratorSettings>({
+const ProblemGenerator = ({ onGenerate, loading = false }) => {
+  const [settings, setSettings] = useState({
     language: "javascript",
     difficulty: "medium",
     topic: "arrays",
@@ -57,7 +42,7 @@ const ProblemGenerator: React.FC<ProblemGeneratorProps> = ({
     "Greedy",
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     await onGenerate(settings);
   };

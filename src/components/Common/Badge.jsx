@@ -1,19 +1,6 @@
 import React from "react";
 
-interface BadgeProps {
-  children: React.ReactNode;
-  variant?:
-    | "primary"
-    | "secondary"
-    | "success"
-    | "warning"
-    | "danger"
-    | "outline";
-  size?: "sm" | "md" | "lg";
-  className?: string;
-}
-
-const Badge: React.FC<BadgeProps> = ({
+const Badge = ({
   children,
   variant = "primary",
   size = "md",

@@ -7,43 +7,12 @@ import Badge from "../Common/Badge";
 import Card from "../Common/Card";
 import api from "../../services/api";
 
-interface Problem {
-  _id: string;
-  title: string;
-  description: string;
-  difficulty: "Easy" | "Medium" | "Hard";
-  examples: Array<{
-    input: string;
-    output: string;
-    explanation?: string;
-  }>;
-  constraints: string[];
-  template: Array<{
-    language: string;
-    code: string;
-  }>;
-}
-
-interface TestResult {
-  status: "accepted" | "wrong_answer";
-  testResults: {
-    passed: number;
-    total: number;
-    results: Array<{
-      passed: boolean;
-      input: string;
-      expectedOutput: string;
-      actualOutput: string;
-    }>;
-  };
-}
-
-const ProblemSolver: React.FC = () => {
-  const { problemId } = useParams<{ problemId: string }>();
-  const [problem, setProblem] = useState<Problem | null>(null);
+const ProblemSolver = () => {
+  const { problemId } = useParams();
+  const [problem, setProblem] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const [output, setOutput] = useState("");
-  const [testResult, setTestResult] = useState<TestResult | null>(null);
+  const [testResult, setTestResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -61,7 +30,7 @@ const ProblemSolver: React.FC = () => {
     }
   };
 
-  const handleRun = async (code: string, input: string) => {
+  const handleRun = async (code, input) => {
     setLoading(true);
     try {
       const response = await api.post("/code/execute", {
@@ -78,7 +47,7 @@ const ProblemSolver: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (code: string) => {
+  const handleSubmit = async (code) => {
     setLoading(true);
     try {
       const response = await api.post(`/code/submit/${problemId}`, {
@@ -101,7 +70,7 @@ const ProblemSolver: React.FC = () => {
     return template?.code || "";
   };
 
-  const getDifficultyColor = (difficulty: string) => {
+  const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
       case "easy":
         return "success";
@@ -131,7 +100,7 @@ const ProblemSolver: React.FC = () => {
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {problem.title}
               </h1>
-              <Badge variant={getDifficultyColor(problem.difficulty) as any}>
+              <Badge variant={getDifficultyColor(problem.difficulty)}>
                 {problem.difficulty}
               </Badge>
             </div>

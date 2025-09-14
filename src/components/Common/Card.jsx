@@ -1,15 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-interface CardProps {
-  children: React.ReactNode;
-  className?: string;
-  padding?: boolean;
-  hover?: boolean;
-  onClick?: () => void;
-}
-
-const Card: React.FC<CardProps> = ({
+const Card = ({
   children,
   className = "",
   padding = true,

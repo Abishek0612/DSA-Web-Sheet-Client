@@ -4,7 +4,7 @@ import { BotIcon, MessageCircleIcon, XIcon } from "lucide-react";
 import ChatBot from "./ChatBot";
 import Button from "../Common/Button";
 
-const AIAssistant: React.FC = () => {
+const AIAssistant = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (

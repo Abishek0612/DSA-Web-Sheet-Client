@@ -1,15 +1,7 @@
 import React from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 
-interface ErrorFallbackProps {
-  error?: Error;
-  resetErrorBoundary?: () => void;
-}
-
-const ErrorFallback: React.FC<ErrorFallbackProps> = ({
-  error,
-  resetErrorBoundary,
-}) => {
+const ErrorFallback = ({ error, resetErrorBoundary }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">

@@ -2,24 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Button from "./Button";
 
-interface EmptyStateProps {
-  icon?: React.ReactNode;
-  title: string;
-  description: string;
-  action?: {
-    label: string;
-    onClick: () => void;
-  };
-  className?: string;
-}
-
-const EmptyState: React.FC<EmptyStateProps> = ({
-  icon,
-  title,
-  description,
-  action,
-  className = "",
-}) => {
+const EmptyState = ({ icon, title, description, action, className = "" }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

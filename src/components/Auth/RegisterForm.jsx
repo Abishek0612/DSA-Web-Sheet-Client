@@ -8,16 +8,11 @@ import {
   LockIcon,
   UserIcon,
 } from "lucide-react";
-import type { RootState } from "../../store/store";
 import { register } from "../../store/slices/authSlice";
 import Button from "../Common/Button";
 import Input from "../Common/Input";
 
-interface RegisterFormProps {
-  onSuccess?: () => void;
-}
-
-const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
+const RegisterForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,16 +23,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -45,7 +40,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     }
 
     const { confirmPassword, ...userData } = formData;
-    const result = await dispatch(register(userData) as any);
+    const result = await dispatch(register(userData));
     if (register.fulfilled.match(result)) {
       onSuccess?.();
     }

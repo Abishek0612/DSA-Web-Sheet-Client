@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircleIcon, ClockIcon, BookOpenIcon } from "lucide-react";
 
-const RecentActivity: React.FC = () => {
+const RecentActivity = () => {
   const activities = [
     {
       id: 1,
@@ -38,7 +38,7 @@ const RecentActivity: React.FC = () => {
     },
   ];
 
-  const getActivityIcon = (type: string) => {
+  const getActivityIcon = (type) => {
     switch (type) {
       case "solved":
         return <CheckCircleIcon className="w-4 h-4 text-green-500" />;
@@ -49,7 +49,7 @@ const RecentActivity: React.FC = () => {
     }
   };
 
-  const getDifficultyColor = (difficulty: string) => {
+  const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
       case "easy":
         return "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/20";
