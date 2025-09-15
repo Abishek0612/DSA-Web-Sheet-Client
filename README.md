@@ -42,7 +42,7 @@ This is the frontend for the DSA Web Sheet application, a platform for tracking 
     ```
 3.  Create a `.env` file in the root directory and add the following environment variable:
     ```env
-    VITE_API_URL=http://localhost:5000/api
+    VITE_API_URL=https://dsa-web-sheet-server.onrender.com/api
     ```
 
 ### Running the Application
