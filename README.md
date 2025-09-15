@@ -34,7 +34,7 @@ This is the frontend for the DSA Web Sheet application, a platform for tracking 
 
 1.  Clone the repository:
     ```bash
-    git clone []
+    git clone [   https://github.com/Abishek0612/DSA-Web-Sheet-Client.git  ]
     ```
 2.  Install the dependencies:
     ```bash
