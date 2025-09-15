@@ -20,6 +20,12 @@ export const useSocket = () => {
         return;
       }
 
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+
+      console.log("🔌 Connecting to socket...");
+
       socketRef.current = io(
         import.meta.env.VITE_API_URL || "http://localhost:5000",
         {
@@ -35,26 +41,27 @@ export const useSocket = () => {
       );
 
       socketRef.current.on("connect", () => {
-        console.log("Socket connected successfully");
+        console.log("✅ Socket connected successfully");
         reconnectAttempts.current = 0;
-        socketRef.current.emit("join-room", user.id);
+        socketRef.current.emit("join-room", `user-${user.id}`);
       });
 
       socketRef.current.on("connect_error", (error) => {
-        console.error("Socket connection error:", error.message);
+        console.error("❌ Socket connection error:", error.message);
         reconnectAttempts.current++;
 
         if (reconnectAttempts.current >= maxReconnectAttempts) {
-          console.warn("Max reconnection attempts reached");
+          console.warn("⚠️ Max reconnection attempts reached");
           socketRef.current.disconnect();
         }
       });
 
       socketRef.current.on("disconnect", (reason) => {
-        console.log("Socket disconnected:", reason);
+        console.log("🔌 Socket disconnected:", reason);
       });
 
       socketRef.current.on("progress-updated", (data) => {
+        console.log("📊 Progress updated:", data);
         if (data.userStats) {
           dispatch(updateUser({ statistics: data.userStats }));
         }
@@ -62,6 +69,7 @@ export const useSocket = () => {
 
       return () => {
         if (socketRef.current) {
+          console.log("🔌 Cleaning up socket connection");
           socketRef.current.disconnect();
           socketRef.current = null;
         }
@@ -73,7 +81,7 @@ export const useSocket = () => {
     if (socketRef.current && socketRef.current.connected) {
       socketRef.current.emit(event, data);
     } else {
-      console.warn("Socket not connected, cannot emit event:", event);
+      console.warn("⚠️ Socket not connected, cannot emit event:", event);
     }
   };
 
