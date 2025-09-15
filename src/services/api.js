@@ -25,11 +25,28 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
+    const originalRequest = error.config;
+
+    if (error.code === "ECONNABORTED") {
+      console.error("Request timeout:", error.message);
+      return Promise.reject(new Error("Request timeout. Please try again."));
+    }
+
+    if (!error.response) {
+      console.error("Network error:", error.message);
+      return Promise.reject(
+        new Error("Network error. Please check your connection.")
+      );
+    }
+
     console.error("API Error:", error.response?.data || error.message);
 
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+
       if (window.location.pathname !== "/login") {
         window.location.href = "/login";
       }
@@ -71,6 +88,9 @@ export const topicsAPI = {
     return response.data;
   },
   getById: async (id) => {
+    if (!id || id === "undefined") {
+      throw new Error("Invalid topic ID");
+    }
     const response = await api.get(`/topics/${id}`);
     return response.data;
   },

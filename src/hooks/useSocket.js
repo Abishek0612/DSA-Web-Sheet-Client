@@ -8,19 +8,51 @@ export const useSocket = () => {
   const socketRef = useRef(null);
   const { isAuthenticated, user } = useAuth();
   const dispatch = useDispatch();
+  const reconnectAttempts = useRef(0);
+  const maxReconnectAttempts = 5;
 
   useEffect(() => {
     if (isAuthenticated && user) {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.warn("No token available for socket connection");
+        return;
+      }
+
       socketRef.current = io(
         import.meta.env.VITE_API_URL || "http://localhost:5000",
         {
           auth: {
-            token: localStorage.getItem("token"),
+            token,
           },
+          reconnection: true,
+          reconnectionAttempts: maxReconnectAttempts,
+          reconnectionDelay: 1000,
+          timeout: 20000,
+          transports: ["websocket", "polling"],
         }
       );
 
-      socketRef.current.emit("join-room", user.id);
+      socketRef.current.on("connect", () => {
+        console.log("Socket connected successfully");
+        reconnectAttempts.current = 0;
+        socketRef.current.emit("join-room", user.id);
+      });
+
+      socketRef.current.on("connect_error", (error) => {
+        console.error("Socket connection error:", error.message);
+        reconnectAttempts.current++;
+
+        if (reconnectAttempts.current >= maxReconnectAttempts) {
+          console.warn("Max reconnection attempts reached");
+          socketRef.current.disconnect();
+        }
+      });
+
+      socketRef.current.on("disconnect", (reason) => {
+        console.log("Socket disconnected:", reason);
+      });
 
       socketRef.current.on("progress-updated", (data) => {
         if (data.userStats) {
@@ -38,8 +70,10 @@ export const useSocket = () => {
   }, [isAuthenticated, user, dispatch]);
 
   const emit = (event, data) => {
-    if (socketRef.current) {
+    if (socketRef.current && socketRef.current.connected) {
       socketRef.current.emit(event, data);
+    } else {
+      console.warn("Socket not connected, cannot emit event:", event);
     }
   };
 

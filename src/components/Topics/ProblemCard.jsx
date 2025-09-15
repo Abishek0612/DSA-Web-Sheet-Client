@@ -43,6 +43,11 @@ const ProblemCard = ({ problem, onStatusChange }) => {
     onStatusChange(problem._id, status);
   };
 
+  const safeLinks = problem.links || {};
+  const safeTags = problem.tags || [];
+  const safeCompanies = problem.companies || [];
+  const safeHints = problem.hints || [];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -79,9 +84,9 @@ const ProblemCard = ({ problem, onStatusChange }) => {
         {problem.description}
       </p>
 
-      {problem.tags.length > 0 && (
+      {safeTags.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-4">
-          {problem.tags.map((tag) => (
+          {safeTags.map((tag) => (
             <Badge key={tag} variant="secondary" className="text-xs">
               {tag}
             </Badge>
@@ -89,20 +94,20 @@ const ProblemCard = ({ problem, onStatusChange }) => {
         </div>
       )}
 
-      {problem.companies.length > 0 && (
+      {safeCompanies.length > 0 && (
         <div className="mb-4">
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
             Asked by:
           </p>
           <div className="flex flex-wrap gap-1">
-            {problem.companies.slice(0, 3).map((company) => (
+            {safeCompanies.slice(0, 3).map((company) => (
               <Badge key={company} variant="outline" className="text-xs">
                 {company}
               </Badge>
             ))}
-            {problem.companies.length > 3 && (
+            {safeCompanies.length > 3 && (
               <Badge variant="outline" className="text-xs">
-                +{problem.companies.length - 3} more
+                +{safeCompanies.length - 3} more
               </Badge>
             )}
           </div>
@@ -111,31 +116,31 @@ const ProblemCard = ({ problem, onStatusChange }) => {
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-2">
-          {problem.links.leetcode && (
+          {safeLinks.leetcode && (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => window.open(problem.links.leetcode, "_blank")}
+              onClick={() => window.open(safeLinks.leetcode, "_blank")}
             >
               <ExternalLinkIcon className="w-4 h-4 mr-1" />
               LeetCode
             </Button>
           )}
-          {problem.links.youtube && (
+          {safeLinks.youtube && (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => window.open(problem.links.youtube, "_blank")}
+              onClick={() => window.open(safeLinks.youtube, "_blank")}
             >
               <PlayIcon className="w-4 h-4 mr-1" />
               Video
             </Button>
           )}
-          {problem.links.article && (
+          {safeLinks.article && (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => window.open(problem.links.article, "_blank")}
+              onClick={() => window.open(safeLinks.article, "_blank")}
             >
               <BookOpenIcon className="w-4 h-4 mr-1" />
               Article
@@ -143,19 +148,19 @@ const ProblemCard = ({ problem, onStatusChange }) => {
           )}
         </div>
 
-        {problem.hints.length > 0 && (
+        {safeHints.length > 0 && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setShowHints(!showHints)}
           >
             <LightbulbIcon className="w-4 h-4 mr-1" />
-            Hints ({problem.hints.length})
+            Hints ({safeHints.length})
           </Button>
         )}
       </div>
 
-      {showHints && (
+      {showHints && safeHints.length > 0 && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
@@ -166,7 +171,7 @@ const ProblemCard = ({ problem, onStatusChange }) => {
             Hints:
           </h4>
           <ul className="space-y-1">
-            {problem.hints.map((hint, index) => (
+            {safeHints.map((hint, index) => (
               <li
                 key={index}
                 className="text-sm text-yellow-700 dark:text-yellow-400"
@@ -219,11 +224,15 @@ const ProblemCard = ({ problem, onStatusChange }) => {
       {problem.progress && problem.progress.status !== "pending" && (
         <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
           <div className="flex justify-between">
-            <span>Attempts: {problem.progress.attempts}</span>
-            <span>Time: {Math.floor(problem.progress.timeSpent / 60)}m</span>
+            <span>Attempts: {problem.progress.attempts || 0}</span>
+            <span>
+              Time: {Math.floor((problem.progress.timeSpent || 0) / 60)}m
+            </span>
             <span>
               Last:{" "}
-              {new Date(problem.progress.lastAttempted).toLocaleDateString()}
+              {problem.progress.lastAttempted
+                ? new Date(problem.progress.lastAttempted).toLocaleDateString()
+                : "Never"}
             </span>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
@@ -10,6 +10,7 @@ import {
   PlayIcon,
   FilterIcon,
   EditIcon,
+  AlertCircleIcon,
 } from "lucide-react";
 import { fetchTopicById } from "../store/slices/topicsSlice";
 import { updateProgress } from "../store/slices/progressSlice";
@@ -25,8 +26,9 @@ import EmptyState from "../components/Common/EmptyState";
 const TopicDetail = () => {
   const { user } = useSelector((state) => state.auth);
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentTopic, loading } = useSelector((state) => state.topics);
+  const { currentTopic, loading, error } = useSelector((state) => state.topics);
   const [viewMode, setViewMode] = useState("cards");
   const [filterDifficulty, setFilterDifficulty] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
@@ -73,6 +75,36 @@ const TopicDetail = () => {
     );
   }
 
+  if (error) {
+    return (
+      <Layout>
+        <Helmet>
+          <title>Topic Not Found - DSA Sheet</title>
+        </Helmet>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center max-w-md">
+            <AlertCircleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Topic Not Found
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              The topic you're looking for doesn't exist or may have been
+              removed.
+            </p>
+            <div className="space-y-2">
+              <Button onClick={() => navigate("/topics")} className="mr-2">
+                Browse Topics
+              </Button>
+              <Button variant="outline" onClick={() => navigate(-1)}>
+                Go Back
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   if (!currentTopic) {
     return (
       <Layout>
@@ -81,7 +113,7 @@ const TopicDetail = () => {
           description="The topic you're looking for doesn't exist or has been removed."
           action={{
             label: "Back to Topics",
-            onClick: () => window.history.back(),
+            onClick: () => navigate("/topics"),
           }}
         />
       </Layout>
@@ -143,7 +175,12 @@ const TopicDetail = () => {
                   <div className="flex items-center space-x-4 mt-2 text-blue-100">
                     <div className="flex items-center space-x-1">
                       <BookOpenIcon className="w-4 h-4" />
-                      <span>{currentTopic.totalProblems} problems</span>
+                      <span>
+                        {currentTopic.totalProblems ||
+                          currentTopic.problems?.length ||
+                          0}{" "}
+                        problems
+                      </span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <ClockIcon className="w-4 h-4" />

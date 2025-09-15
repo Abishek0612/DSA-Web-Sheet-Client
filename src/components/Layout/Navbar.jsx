@@ -21,6 +21,7 @@ import { logout } from "../../store/slices/authSlice";
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -36,12 +37,53 @@ const Navbar = () => {
       : []),
   ];
 
+  const mockNotifications = [
+    {
+      id: "1",
+      title: "Problem Solved!",
+      message: "Great job solving Two Sum!",
+      type: "success",
+      timestamp: new Date(Date.now() - 5 * 60 * 1000),
+      read: false,
+    },
+    {
+      id: "2",
+      title: "Streak Milestone",
+      message: "You've reached a 7-day streak!",
+      type: "achievement",
+      timestamp: new Date(Date.now() - 60 * 60 * 1000),
+      read: false,
+    },
+    {
+      id: "3",
+      title: "New Topic Available",
+      message: "Binary Trees topic has been added",
+      type: "info",
+      timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
+      read: true,
+    },
+  ];
+
+  const unreadCount = mockNotifications.filter((n) => !n.read).length;
+
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
 
   const isActive = (path) => location.pathname === path;
+
+  const formatTimeAgo = (timestamp) => {
+    const now = new Date();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    return `${days}d ago`;
+  };
 
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700">
@@ -83,12 +125,87 @@ const Navbar = () => {
               <SearchIcon className="w-5 h-5" />
             </button>
 
-            <button className="p-2 rounded-lg text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative">
-              <BellIcon className="w-5 h-5" />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                className="p-2 rounded-lg text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative"
+              >
+                <BellIcon className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
 
-            {/* User Role Badge */}
+              <AnimatePresence>
+                {isNotificationOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    transition={{ duration: 0.1 }}
+                    className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 max-h-96 overflow-y-auto"
+                  >
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                        Notifications
+                      </h3>
+                    </div>
+
+                    {mockNotifications.length > 0 ? (
+                      <div className="py-1">
+                        {mockNotifications.map((notification) => (
+                          <div
+                            key={notification.id}
+                            className={`px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-b-0 ${
+                              !notification.read
+                                ? "bg-blue-50 dark:bg-blue-900/10"
+                                : ""
+                            }`}
+                          >
+                            <div className="flex items-start space-x-3">
+                              <div
+                                className={`w-2 h-2 rounded-full mt-2 ${
+                                  !notification.read
+                                    ? "bg-blue-500"
+                                    : "bg-gray-300"
+                                }`}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                  {notification.title}
+                                </p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                  {notification.message}
+                                </p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                  {formatTimeAgo(notification.timestamp)}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="px-4 py-8 text-center">
+                        <BellIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          No notifications yet
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+                      <button className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
+                        Mark all as read
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {user?.role === "admin" && (
               <div className="px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-xs font-medium rounded-full">
                 Admin
