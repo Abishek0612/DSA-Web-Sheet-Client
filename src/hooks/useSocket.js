@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 import { useAuth } from "./useAuth";
 import { updateUser } from "../store/slices/authSlice";
+import { addNotification } from "../store/slices/notificationSlice";
 
 export const useSocket = () => {
   const socketRef = useRef(null);
@@ -58,6 +59,12 @@ export const useSocket = () => {
 
       socketRef.current.on("disconnect", (reason) => {
         console.log("🔌 Socket disconnected:", reason);
+      });
+
+      socketRef.current.on("notification", (data) => {
+        console.log("📊 Notification received:", data);
+
+        dispatch(addNotification(data));
       });
 
       socketRef.current.on("progress-updated", (data) => {

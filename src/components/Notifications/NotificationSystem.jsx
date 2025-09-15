@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSelector, useDispatch } from "react-redux";
 import {
   CheckCircleIcon,
   InfoIcon,
@@ -8,28 +9,30 @@ import {
   BellIcon,
 } from "lucide-react";
 import { useSocket } from "../../hooks/useSocket";
+import { addNotification } from "../../store/slices/notificationSlice";
 
 const NotificationSystem = () => {
-  const [notifications, setNotifications] = useState([]);
+  const [toastNotifications, setToastNotifications] = useState([]);
   const { on } = useSocket();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const cleanup = on("notification", (notification) => {
-      console.log(" Received notification:", notification);
+      console.log("📱 Received notification:", notification);
 
       playNotificationSound();
 
-      setNotifications((prev) => [...prev, notification]);
+      setToastNotifications((prev) => [...prev, notification]);
 
       setTimeout(() => {
-        setNotifications((prev) =>
+        setToastNotifications((prev) =>
           prev.filter((n) => n.id !== notification.id)
         );
       }, 5000);
     });
 
     return cleanup;
-  }, [on]);
+  }, [on, dispatch]);
 
   const playNotificationSound = () => {
     try {
@@ -45,8 +48,8 @@ const NotificationSystem = () => {
     }
   };
 
-  const removeNotification = (id) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  const removeToastNotification = (id) => {
+    setToastNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
   const getIcon = (type) => {
@@ -82,7 +85,7 @@ const NotificationSystem = () => {
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
       <AnimatePresence>
-        {notifications.map((notification) => (
+        {toastNotifications.map((notification) => (
           <motion.div
             key={notification.id}
             initial={{ opacity: 0, x: 300, scale: 0.3 }}
@@ -111,7 +114,7 @@ const NotificationSystem = () => {
                 )}
               </div>
               <button
-                onClick={() => removeNotification(notification.id)}
+                onClick={() => removeToastNotification(notification.id)}
                 className="text-current opacity-50 hover:opacity-75 transition-opacity"
               >
                 <XIcon className="w-4 h-4" />

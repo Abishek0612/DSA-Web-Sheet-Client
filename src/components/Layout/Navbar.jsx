@@ -17,6 +17,10 @@ import {
   ShieldIcon,
 } from "lucide-react";
 import { logout } from "../../store/slices/authSlice";
+import {
+  markAsRead,
+  markAllAsRead,
+} from "../../store/slices/notificationSlice";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,6 +30,9 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { notifications, unreadCount } = useSelector(
+    (state) => state.notifications
+  );
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
@@ -37,52 +44,48 @@ const Navbar = () => {
       : []),
   ];
 
-  const mockNotifications = [
-    {
-      id: "1",
-      title: "Problem Solved!",
-      message: "Great job solving Two Sum!",
-      type: "success",
-      timestamp: new Date(Date.now() - 5 * 60 * 1000),
-      read: false,
-    },
-    {
-      id: "2",
-      title: "Streak Milestone",
-      message: "You've reached a 7-day streak!",
-      type: "achievement",
-      timestamp: new Date(Date.now() - 60 * 60 * 1000),
-      read: false,
-    },
-    {
-      id: "3",
-      title: "New Topic Available",
-      message: "Binary Trees topic has been added",
-      type: "info",
-      timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
-      read: true,
-    },
-  ];
-
-  const unreadCount = mockNotifications.filter((n) => !n.read).length;
-
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
+  };
+
+  const handleNotificationClick = (notificationId) => {
+    dispatch(markAsRead(notificationId));
+  };
+
+  const handleMarkAllAsRead = () => {
+    dispatch(markAllAsRead());
+    setIsNotificationOpen(false);
   };
 
   const isActive = (path) => location.pathname === path;
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
-    const diff = now - timestamp;
+    const diff = now - new Date(timestamp);
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
+    if (minutes < 1) return "just now";
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     return `${days}d ago`;
+  };
+
+  const getNotificationIcon = (type) => {
+    switch (type) {
+      case "success":
+        return "🎉";
+      case "info":
+        return "ℹ️";
+      case "warning":
+        return "⚠️";
+      case "error":
+        return "❌";
+      default:
+        return "🔔";
+    }
   };
 
   return (
@@ -132,8 +135,8 @@ const Navbar = () => {
               >
                 <BellIcon className="w-5 h-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {unreadCount}
+                  <span className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center px-1">
+                    {unreadCount > 99 ? "99+" : unreadCount}
                   </span>
                 )}
               </button>
@@ -148,35 +151,51 @@ const Navbar = () => {
                     className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 max-h-96 overflow-y-auto"
                   >
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                        Notifications
-                      </h3>
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                          Notifications {unreadCount > 0 && `(${unreadCount})`}
+                        </h3>
+                        {unreadCount > 0 && (
+                          <button
+                            onClick={handleMarkAllAsRead}
+                            className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium"
+                          >
+                            Mark all as read
+                          </button>
+                        )}
+                      </div>
                     </div>
 
-                    {mockNotifications.length > 0 ? (
+                    {notifications.length > 0 ? (
                       <div className="py-1">
-                        {mockNotifications.map((notification) => (
+                        {notifications.slice(0, 10).map((notification) => (
                           <div
                             key={notification.id}
-                            className={`px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-b-0 ${
+                            onClick={() =>
+                              handleNotificationClick(notification.id)
+                            }
+                            className={`px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-b-0 cursor-pointer transition-colors ${
                               !notification.read
                                 ? "bg-blue-50 dark:bg-blue-900/10"
                                 : ""
                             }`}
                           >
                             <div className="flex items-start space-x-3">
-                              <div
-                                className={`w-2 h-2 rounded-full mt-2 ${
-                                  !notification.read
-                                    ? "bg-blue-500"
-                                    : "bg-gray-300"
-                                }`}
-                              />
+                              <div className="flex-shrink-0 mt-1">
+                                <span className="text-lg">
+                                  {getNotificationIcon(notification.type)}
+                                </span>
+                              </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                  {notification.title}
-                                </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                <div className="flex items-center space-x-2">
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                    {notification.title}
+                                  </p>
+                                  {!notification.read && (
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0" />
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                                   {notification.message}
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -186,6 +205,14 @@ const Navbar = () => {
                             </div>
                           </div>
                         ))}
+
+                        {notifications.length > 10 && (
+                          <div className="px-4 py-3 text-center border-t border-gray-200 dark:border-gray-700">
+                            <button className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
+                              View all notifications
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="px-4 py-8 text-center">
@@ -193,14 +220,11 @@ const Navbar = () => {
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           No notifications yet
                         </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                          We'll notify you when something important happens
+                        </p>
                       </div>
                     )}
-
-                    <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
-                      <button className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
-                        Mark all as read
-                      </button>
-                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -222,7 +246,7 @@ const Navbar = () => {
                     {user?.name?.charAt(0)?.toUpperCase()}
                   </span>
                 </div>
-                <div className="text-left">
+                <div className="text-left hidden lg:block">
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     {user?.name}
                   </span>
@@ -306,6 +330,60 @@ const Navbar = () => {
             className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700"
           >
             <div className="px-2 pt-2 pb-3 space-y-1">
+              {/* Mobile Notifications */}
+              <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Notifications
+                  </span>
+                  {unreadCount > 0 && (
+                    <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                      {unreadCount}
+                    </span>
+                  )}
+                </div>
+                {notifications.length > 0 ? (
+                  <div className="mt-2 space-y-2 max-h-32 overflow-y-auto">
+                    {notifications.slice(0, 3).map((notification) => (
+                      <div
+                        key={notification.id}
+                        onClick={() => handleNotificationClick(notification.id)}
+                        className={`p-2 rounded text-xs cursor-pointer ${
+                          !notification.read
+                            ? "bg-blue-50 dark:bg-blue-900/10"
+                            : "bg-gray-50 dark:bg-gray-700"
+                        }`}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <span>{getNotificationIcon(notification.type)}</span>
+                          <span className="font-medium">
+                            {notification.title}
+                          </span>
+                          {!notification.read && (
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                          )}
+                        </div>
+                        <p className="mt-1 text-gray-600 dark:text-gray-400 line-clamp-2">
+                          {notification.message}
+                        </p>
+                      </div>
+                    ))}
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={handleMarkAllAsRead}
+                        className="w-full text-xs text-blue-600 dark:text-blue-400 py-1"
+                      >
+                        Mark all as read
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    No notifications
+                  </p>
+                )}
+              </div>
+
               {navigation.map((item) => {
                 const Icon = item.icon;
                 return (
