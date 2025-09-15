@@ -1,69 +1,56 @@
-# React + TypeScript + Vite
+### Frontend README
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# DSA Web Sheet - Frontend
 
-Currently, two official plugins are available:
+This is the frontend for the DSA Web Sheet application, a platform for tracking progress in learning data structures and algorithms.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Dashboard:** View your overall progress and statistics.
+- **Topics:** Browse through a list of DSA topics and problems.
+- **Problem Solving:** Solve problems with an in-built code editor.
+- **Progress Tracking:** Track your progress on different topics and problems.
+- **AI-Powered Assistance:** Get AI-powered research on DSA topics and generate new problems.
+- **Real-time Notifications:** Get real-time updates on your progress and new content.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **React:** JavaScript library for building user interfaces.
+- **Redux:** For state management.
+- **React Router:** For routing.
+- **Axios:** For making HTTP requests.
+- **Socket.io Client:** For real-time communication.
+- **Framer Motion:** For animations.
+- **Tailwind CSS:** For styling.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+
+- Node.js
+- npm
+
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone []
+    ```
+2.  Install the dependencies:
+    ```bash
+    npm install
+    ```
+3.  Create a `.env` file in the root directory and add the following environment variable:
+    ```env
+    VITE_API_URL=http://localhost:5000/api
+    ```
+
+### Running the Application
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```

@@ -9,6 +9,8 @@ import NotificationSystem from "./components/Notifications/NotificationSystem";
 
 const Login = React.lazy(() => import("./pages/Login"));
 const Register = React.lazy(() => import("./pages/Register"));
+const ForgotPassword = React.lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Topics = React.lazy(() => import("./pages/Topics"));
 const TopicDetail = React.lazy(() => import("./pages/TopicDetail"));
@@ -58,6 +60,8 @@ function App() {
                 )
               }
             />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
 
             <Route
               path="/"
