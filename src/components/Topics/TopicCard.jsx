@@ -1,10 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ChevronRightIcon, ClockIcon, BookOpenIcon } from "lucide-react";
+import {
+  ChevronRightIcon,
+  ClockIcon,
+  BookOpenIcon,
+  EditIcon,
+  TrashIcon,
+} from "lucide-react";
 import Badge from "../Common/Badge";
+import Button from "../Common/Button";
 
-const TopicCard = ({ topic, delay = 0 }) => {
+const TopicCard = ({ topic, delay = 0, isAdmin = false, onEdit, onDelete }) => {
   const progress = topic.progress || { solved: 0, total: 0, percentage: 0 };
 
   return (
@@ -37,6 +44,34 @@ const TopicCard = ({ topic, delay = 0 }) => {
             </div>
           </div>
         </div>
+
+        {/* Admin Controls */}
+        {isAdmin && (
+          <div className="flex justify-end space-x-2 mb-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                onEdit();
+              }}
+              leftIcon={<EditIcon className="w-3 h-3" />}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                onDelete();
+              }}
+              leftIcon={<TrashIcon className="w-3 h-3" />}
+            >
+              Delete
+            </Button>
+          </div>
+        )}
 
         <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
           {topic.description}

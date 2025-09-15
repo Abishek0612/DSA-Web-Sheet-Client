@@ -14,6 +14,7 @@ import {
   SearchIcon,
   BellIcon,
   SparklesIcon,
+  ShieldIcon,
 } from "lucide-react";
 import { logout } from "../../store/slices/authSlice";
 
@@ -31,7 +32,7 @@ const Navbar = () => {
     { name: "Progress", href: "/progress", icon: BarChart },
     { name: "AI Research", href: "/ai-research", icon: SparklesIcon },
     ...(user?.role === "admin"
-      ? [{ name: "Admin", href: "/admin/topics", icon: CogIcon }]
+      ? [{ name: "Admin", href: "/admin/topics", icon: ShieldIcon }]
       : []),
   ];
 
@@ -87,6 +88,13 @@ const Navbar = () => {
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
 
+            {/* User Role Badge */}
+            {user?.role === "admin" && (
+              <div className="px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-xs font-medium rounded-full">
+                Admin
+              </div>
+            )}
+
             <div className="relative">
               <button
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
@@ -97,9 +105,14 @@ const Navbar = () => {
                     {user?.name?.charAt(0)?.toUpperCase()}
                   </span>
                 </div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {user?.name}
-                </span>
+                <div className="text-left">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {user?.name}
+                  </span>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    {user?.email}
+                  </div>
+                </div>
               </button>
 
               <AnimatePresence>
@@ -127,6 +140,16 @@ const Navbar = () => {
                       <CogIcon className="w-4 h-4" />
                       <span>Settings</span>
                     </Link>
+                    {user?.role === "admin" && (
+                      <Link
+                        to="/admin/topics"
+                        className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        <ShieldIcon className="w-4 h-4" />
+                        <span>Admin Panel</span>
+                      </Link>
+                    )}
                     <hr className="my-1 border-gray-200 dark:border-gray-700" />
                     <button
                       onClick={handleLogout}
@@ -181,6 +204,11 @@ const Navbar = () => {
                   >
                     <Icon className="w-5 h-5" />
                     <span>{item.name}</span>
+                    {item.name === "Admin" && (
+                      <span className="ml-auto px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-xs font-medium rounded-full">
+                        Admin
+                      </span>
+                    )}
                   </Link>
                 );
               })}

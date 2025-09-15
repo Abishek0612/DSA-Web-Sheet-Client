@@ -2,7 +2,15 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { SearchIcon, GridIcon, ListIcon } from "lucide-react";
+import {
+  SearchIcon,
+  GridIcon,
+  ListIcon,
+  PlusIcon,
+  SettingsIcon,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { fetchTopics } from "../store/slices/topicsSlice";
 import Layout from "../components/Layout/Layout";
 import TopicCard from "../components/Topics/TopicCard";
@@ -10,16 +18,27 @@ import TopicList from "../components/Topics/TopicList";
 import FilterDropdown from "../components/Topics/FilterDropdown";
 import LoadingSkeleton from "../components/Common/LoadingSkeleton";
 import EmptyState from "../components/Common/EmptyState";
+import Button from "../components/Common/Button";
+import Modal from "../components/Common/Modal";
+import TopicForm from "./Admin/TopicForm";
+import ConfirmDialog from "./Admin/ConfirmDialog";
+import api from "../services/api";
 import debounce from "lodash.debounce";
 
 const Topics = () => {
   const dispatch = useDispatch();
   const { topics, loading, error } = useSelector((state) => state.topics);
+  const { user } = useSelector((state) => state.auth);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("order");
   const [viewMode, setViewMode] = useState("grid");
+
+  const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [editingTopic, setEditingTopic] = useState(null);
+  const [deletingTopic, setDeletingTopic] = useState(null);
 
   useEffect(() => {
     dispatch(fetchTopics());
@@ -74,6 +93,48 @@ const Topics = () => {
     setSortBy("order");
   };
 
+  const handleCreateTopic = () => {
+    setEditingTopic(null);
+    setIsTopicModalOpen(true);
+  };
+
+  const handleEditTopic = (topic) => {
+    setEditingTopic(topic);
+    setIsTopicModalOpen(true);
+  };
+
+  const handleDeleteTopic = (topic) => {
+    setDeletingTopic(topic);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleTopicSubmit = async (formData) => {
+    try {
+      if (editingTopic) {
+        await api.put(`/topics/${editingTopic._id}`, formData);
+        toast.success("Topic updated successfully!");
+      } else {
+        await api.post("/topics", formData);
+        toast.success("Topic created successfully!");
+      }
+      setIsTopicModalOpen(false);
+      dispatch(fetchTopics());
+    } catch (error) {
+      toast.error(error.message || "Operation failed");
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await api.delete(`/topics/${deletingTopic._id}`);
+      toast.success("Topic deleted successfully!");
+      setIsDeleteModalOpen(false);
+      dispatch(fetchTopics());
+    } catch (error) {
+      toast.error(error.message || "Delete failed");
+    }
+  };
+
   if (loading) {
     return (
       <Layout>
@@ -120,6 +181,28 @@ const Topics = () => {
           </div>
 
           <div className="flex items-center space-x-2 mt-4 md:mt-0">
+            {/* Admin Controls */}
+            {user?.role === "admin" && (
+              <div className="flex items-center space-x-2 mr-4">
+                <Button
+                  onClick={handleCreateTopic}
+                  leftIcon={<PlusIcon className="w-4 h-4" />}
+                  variant="primary"
+                >
+                  Add Topic
+                </Button>
+                <Link to="/admin/topics">
+                  <Button
+                    variant="outline"
+                    leftIcon={<SettingsIcon className="w-4 h-4" />}
+                  >
+                    Manage All
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            {/* View Mode Toggle */}
             <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
               <button
                 onClick={() => setViewMode("grid")}
@@ -206,6 +289,9 @@ const Topics = () => {
                       key={topic._id}
                       topic={topic}
                       delay={index * 0.1}
+                      isAdmin={user?.role === "admin"}
+                      onEdit={() => handleEditTopic(topic)}
+                      onDelete={() => handleDeleteTopic(topic)}
                     />
                   ))}
                 </div>
@@ -216,6 +302,9 @@ const Topics = () => {
                       key={topic._id}
                       topic={topic}
                       delay={index * 0.05}
+                      isAdmin={user?.role === "admin"}
+                      onEdit={() => handleEditTopic(topic)}
+                      onDelete={() => handleDeleteTopic(topic)}
                     />
                   ))}
                 </div>
@@ -233,6 +322,28 @@ const Topics = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Admin Modals */}
+      <Modal
+        isOpen={isTopicModalOpen}
+        onClose={() => setIsTopicModalOpen(false)}
+        title={editingTopic ? "Edit Topic" : "Create Topic"}
+        size="lg"
+      >
+        <TopicForm
+          topic={editingTopic}
+          onSubmit={handleTopicSubmit}
+          onCancel={() => setIsTopicModalOpen(false)}
+        />
+      </Modal>
+
+      <ConfirmDialog
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Topic"
+        message={`Are you sure you want to delete "${deletingTopic?.name}"? This action cannot be undone.`}
+      />
     </Layout>
   );
 };
