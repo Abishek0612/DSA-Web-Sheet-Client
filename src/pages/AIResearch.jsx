@@ -1,3 +1,4 @@
+import { aiAPI } from "../services/api";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
@@ -13,26 +14,12 @@ const AIResearch = () => {
   const handleResearch = async (topic, context) => {
     setLoading(true);
     try {
-      const response = await fetch("/api/ai/research", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ topic, context }),
+      const data = await aiAPI.generateResearch({ topic, context });
+      setResearch({
+        topic: data.topic,
+        content: data.research,
+        timestamp: data.timestamp,
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setResearch({
-          topic: data.topic,
-          content: data.research,
-          timestamp: data.timestamp,
-        });
-      } else {
-        throw new Error(data.message);
-      }
     } catch (error) {
       console.error("Research failed:", error);
     } finally {
