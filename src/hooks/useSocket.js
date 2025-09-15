@@ -9,8 +9,7 @@ export const useSocket = () => {
   const socketRef = useRef(null);
   const { isAuthenticated, user } = useAuth();
   const dispatch = useDispatch();
-  const reconnectAttempts = useRef(0);
-  const maxReconnectAttempts = 5;
+  const reconnectTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -23,37 +22,46 @@ export const useSocket = () => {
 
       if (socketRef.current) {
         socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
       }
 
       console.log("🔌 Connecting to socket...");
 
-      socketRef.current = io(
-        import.meta.env.VITE_API_URL || "http://localhost:5000",
-        {
-          auth: {
-            token,
-          },
-          reconnection: true,
-          reconnectionAttempts: maxReconnectAttempts,
-          reconnectionDelay: 1000,
-          timeout: 20000,
-          transports: ["websocket", "polling"],
-        }
-      );
+      const serverUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+      socketRef.current = io(serverUrl, {
+        auth: {
+          token,
+        },
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        timeout: 10000,
+        forceNew: true,
+        transports: ["websocket", "polling"],
+      });
 
       socketRef.current.on("connect", () => {
         console.log("✅ Socket connected successfully");
-        reconnectAttempts.current = 0;
         socketRef.current.emit("join-room", `user-${user.id}`);
       });
 
       socketRef.current.on("connect_error", (error) => {
-        console.error("❌ Socket connection error:", error.message);
-        reconnectAttempts.current++;
+        console.error(" Socket connection error:", error.message);
 
-        if (reconnectAttempts.current >= maxReconnectAttempts) {
-          console.warn("⚠️ Max reconnection attempts reached");
-          socketRef.current.disconnect();
+        if (!reconnectTimeoutRef.current) {
+          reconnectTimeoutRef.current = setTimeout(() => {
+            reconnectTimeoutRef.current = null;
+            if (socketRef.current && !socketRef.current.connected) {
+              console.log("🔄 Retrying socket connection...");
+              socketRef.current.connect();
+            }
+          }, 3000);
         }
       });
 
@@ -62,8 +70,7 @@ export const useSocket = () => {
       });
 
       socketRef.current.on("notification", (data) => {
-        console.log("📊 Notification received:", data);
-
+        console.log("📱 Notification received:", data);
         dispatch(addNotification(data));
       });
 
@@ -75,8 +82,14 @@ export const useSocket = () => {
       });
 
       return () => {
+        console.log("🔌 Cleaning up socket connection");
+
+        if (reconnectTimeoutRef.current) {
+          clearTimeout(reconnectTimeoutRef.current);
+          reconnectTimeoutRef.current = null;
+        }
+
         if (socketRef.current) {
-          console.log("🔌 Cleaning up socket connection");
           socketRef.current.disconnect();
           socketRef.current = null;
         }
@@ -85,7 +98,7 @@ export const useSocket = () => {
   }, [isAuthenticated, user, dispatch]);
 
   const emit = (event, data) => {
-    if (socketRef.current && socketRef.current.connected) {
+    if (socketRef.current?.connected) {
       socketRef.current.emit(event, data);
     } else {
       console.warn("⚠️ Socket not connected, cannot emit event:", event);
