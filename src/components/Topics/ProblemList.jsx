@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   CheckCircleIcon,
   ClockIcon,
@@ -9,7 +10,9 @@ import {
 } from "lucide-react";
 import Badge from "../Common/Badge";
 
-const ProblemList = ({ problems, onProblemClick, onStatusChange }) => {
+const ProblemList = ({ problems, onProblemClick, onStatusChange, topicId }) => {
+  const navigate = useNavigate();
+
   const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
       case "easy":
@@ -33,6 +36,12 @@ const ProblemList = ({ problems, onProblemClick, onStatusChange }) => {
         return (
           <div className="w-5 h-5 border-2 border-gray-300 rounded-full" />
         );
+    }
+  };
+
+  const handleProblemClick = (problem) => {
+    if (onProblemClick) {
+      onProblemClick(problem._id);
     }
   };
 
@@ -71,7 +80,7 @@ const ProblemList = ({ problems, onProblemClick, onStatusChange }) => {
 
                 <div className="flex-1 min-w-0">
                   <button
-                    onClick={() => onProblemClick(problem._id)}
+                    onClick={() => handleProblemClick(problem)}
                     className="text-left w-full"
                   >
                     <h4 className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
@@ -81,22 +90,23 @@ const ProblemList = ({ problems, onProblemClick, onStatusChange }) => {
                       <Badge className={getDifficultyColor(problem.difficulty)}>
                         {problem.difficulty}
                       </Badge>
-                      {problem.tags.slice(0, 2).map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
+                      {problem.tags &&
+                        problem.tags.slice(0, 2).map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className="text-xs"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
                     </div>
                   </button>
                 </div>
               </div>
 
               <div className="flex items-center space-x-2 flex-shrink-0">
-                {problem.links.leetcode && (
+                {problem.links?.leetcode && (
                   <button
                     onClick={() =>
                       window.open(problem.links.leetcode, "_blank")
@@ -107,7 +117,7 @@ const ProblemList = ({ problems, onProblemClick, onStatusChange }) => {
                     <ExternalLinkIcon className="w-4 h-4" />
                   </button>
                 )}
-                {problem.links.youtube && (
+                {problem.links?.youtube && (
                   <button
                     onClick={() => window.open(problem.links.youtube, "_blank")}
                     className="p-2 text-gray-400 hover:text-red-600 transition-colors"
@@ -116,7 +126,7 @@ const ProblemList = ({ problems, onProblemClick, onStatusChange }) => {
                     <PlayIcon className="w-4 h-4" />
                   </button>
                 )}
-                {problem.links.article && (
+                {problem.links?.article && (
                   <button
                     onClick={() => window.open(problem.links.article, "_blank")}
                     className="p-2 text-gray-400 hover:text-green-600 transition-colors"

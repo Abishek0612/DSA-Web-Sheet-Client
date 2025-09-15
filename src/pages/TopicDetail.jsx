@@ -274,36 +274,45 @@ const TopicDetail = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          {filteredProblems.length === 0 ? (
-            <EmptyState
-              icon={<FilterIcon className="w-12 h-12" />}
-              title="No problems found"
-              description="Try adjusting your filters or check back later for new problems."
-              action={{
-                label: "Clear Filters",
-                onClick: () => {
-                  setFilterDifficulty("");
-                  setFilterStatus("");
-                },
-              }}
-            />
-          ) : viewMode === "cards" ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredProblems.map((problem) => (
-                <ProblemCard
-                  key={problem._id}
-                  problem={problem}
-                  onStatusChange={handleStatusChange}
-                />
-              ))}
-            </div>
+          {currentTopic?.problems && currentTopic.problems.length > 0 ? (
+            filteredProblems.length === 0 ? (
+              <EmptyState
+                icon={<FilterIcon className="w-12 h-12" />}
+                title="No problems found"
+                description="Try adjusting your filters or check back later for new problems."
+                action={{
+                  label: "Clear Filters",
+                  onClick: () => {
+                    setFilterDifficulty("");
+                    setFilterStatus("");
+                  },
+                }}
+              />
+            ) : viewMode === "cards" ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {filteredProblems.map((problem) => (
+                  <ProblemCard
+                    key={problem._id}
+                    problem={problem}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))}
+              </div>
+            ) : (
+              <ProblemList
+                problems={filteredProblems}
+                topicId={id}
+                onProblemClick={(problemId) =>
+                  console.log("Problem clicked:", problemId)
+                }
+                onStatusChange={handleStatusChange}
+              />
+            )
           ) : (
-            <ProblemList
-              problems={filteredProblems}
-              onProblemClick={(problemId) =>
-                console.log("Problem clicked:", problemId)
-              }
-              onStatusChange={handleStatusChange}
+            <EmptyState
+              icon={<BookOpenIcon className="w-12 h-12" />}
+              title="No problems available"
+              description="This topic doesn't have any problems yet. Check back later!"
             />
           )}
         </motion.div>
