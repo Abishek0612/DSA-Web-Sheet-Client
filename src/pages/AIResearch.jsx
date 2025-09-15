@@ -22,11 +22,11 @@ const AIResearch = () => {
       });
     } catch (error) {
       console.error("Research failed:", error);
+      toast.error(error.message || "Failed to get research");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <Layout>
       <Helmet>
